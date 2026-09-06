@@ -9,4 +9,4 @@ This page holds no secrets. It calls the GitHub API with a fine-grained token yo
 only in your browser. Rendering and uploading run in the private repository's GitHub Actions.
 
 Token: github.com/settings/personal-access-tokens/new -> only the `youtube-ideas` repository ->
-Actions: Read and write, Contents: Read-only, Secrets: Read-only (optional).
+Actions: Read and write, Contents: Read-only, Secrets: Read and write.

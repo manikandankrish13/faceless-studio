@@ -5,275 +5,532 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0f1117">
+<meta name="theme-color" content="#101218">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Faceless Studio</title>
 <style>
-  :root{--bg:#0f1117;--card:#171a23;--line:#262a37;--text:#e8eaf0;--muted:#9aa1b3;--accent:#ffd400;--ok:#3ddc84;--bad:#ff5c5c;--run:#5aa9ff;--radius:14px}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:max(12px,env(safe-area-inset-top)) 14px 40px}
-  h1{font-size:22px;margin:6px 0 14px;display:flex;align-items:center;gap:10px}
-  h1 small{font-weight:400;color:var(--muted);font-size:13px}
-  h2{font-size:15px;margin:0 0 10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:14px}
-  label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
-  input,select,textarea{width:100%;background:#0c0e14;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font-size:16px}
-  textarea{min-height:64px;resize:vertical}
-  .row{display:flex;gap:8px}
-  .row>*{flex:1}
-  .seg{display:flex;background:#0c0e14;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-  .seg button{flex:1;background:none;border:0;color:var(--muted);padding:11px;font-size:15px}
+  :root{--bg:#101218;--card:#191c26;--card2:#20242f;--line:#2a2f3d;--text:#eef0f6;--muted:#9ea6ba;--accent:#ffd60a;--ok:#3ddc84;--bad:#ff6b6b;--run:#5aa9ff;--warn:#ffb347;--r:16px}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  body{padding:calc(10px + env(safe-area-inset-top)) 14px calc(84px + env(safe-area-inset-bottom))}
+  header{display:flex;align-items:center;justify-content:space-between;margin:4px 0 14px}
+  header h1{font-size:20px;margin:0}
+  header .sub{font-size:12px;color:var(--muted)}
+  .pill{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--card2);color:var(--muted);white-space:nowrap}
+  .pill.ok{background:rgba(61,220,132,.15);color:var(--ok)}.pill.bad{background:rgba(255,107,107,.15);color:var(--bad)}
+  .pill.run{background:rgba(90,169,255,.15);color:var(--run)}.pill.warn{background:rgba(255,179,71,.15);color:var(--warn)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
+  .card h2{font-size:17px;margin:0 0 6px}
+  .card .lead{color:var(--muted);font-size:14px;margin:0 0 12px}
+  label{display:block;font-size:13px;color:var(--muted);margin:12px 0 5px}
+  input,select,textarea{width:100%;background:#0d0f15;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px 13px;font-size:16px;font-family:inherit}
+  textarea{min-height:70px;resize:vertical}
+  .seg{display:flex;background:#0d0f15;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .seg button{flex:1;background:none;border:0;color:var(--muted);padding:12px;font-size:15px;font-family:inherit}
   .seg button.on{background:var(--accent);color:#000;font-weight:700}
-  .btn{display:block;width:100%;border:0;border-radius:12px;padding:14px;font-size:17px;font-weight:700;background:var(--accent);color:#000;margin-top:14px}
-  .btn.secondary{background:#232838;color:var(--text);font-weight:600}
-  .btn.small{padding:9px 12px;font-size:14px;width:auto;display:inline-block;margin:6px 6px 0 0}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:13px;padding:14px;font-size:16px;font-weight:700;background:var(--accent);color:#000;margin-top:14px;font-family:inherit;text-decoration:none}
+  .btn.sec{background:var(--card2);color:var(--text);font-weight:600}
+  .btn.ghost{background:none;border:1px solid var(--line);color:var(--muted);font-weight:600}
+  .btn.sm{width:auto;padding:9px 13px;font-size:14px;margin:8px 8px 0 0}
   .btn:disabled{opacity:.45}
-  .check{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:15px}
-  .check input{width:22px;height:22px}
-  .run{border-top:1px solid var(--line);padding:12px 0}
-  .run:first-of-type{border-top:0;padding-top:0}
-  .run .t{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
-  .run .title{font-weight:600}
-  .status{font-size:12px;padding:3px 8px;border-radius:999px;background:#232838;color:var(--muted);white-space:nowrap}
-  .status.success{background:rgba(61,220,132,.15);color:var(--ok)}
-  .status.failure,.status.cancelled{background:rgba(255,92,92,.15);color:var(--bad)}
-  .status.in_progress,.status.queued{background:rgba(90,169,255,.15);color:var(--run)}
-  .meta{font-size:13px;color:var(--muted);margin-top:2px}
-  .msg{font-size:14px;color:var(--muted);margin-top:10px;white-space:pre-wrap}
-  .msg.err{color:var(--bad)}
-  .msg.ok{color:var(--ok)}
-  video{width:100%;max-height:70vh;background:#000;border-radius:10px;margin-top:10px}
-  .preview h3{margin:12px 0 4px;font-size:16px}
-  .preview p{margin:0;font-size:14px;color:var(--muted);white-space:pre-wrap}
-  ul.list{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--muted)}
-  a{color:var(--run)}
-  details summary{cursor:pointer;color:var(--muted);font-size:14px}
-  .secret{display:inline-block;font-size:12px;padding:3px 8px;border-radius:999px;margin:4px 4px 0 0;background:#232838;color:var(--muted)}
-  .secret.have{background:rgba(61,220,132,.15);color:var(--ok)}
+  .row{display:flex;gap:10px}.row>*{flex:1}
+  .toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;font-size:15px}
+  .toggle input{width:24px;height:24px;flex:0 0 auto}
+  .msg{font-size:14px;color:var(--muted);margin-top:10px;white-space:pre-wrap}.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+  .step{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.step:first-child{border-top:0}
+  .step .n{width:28px;height:28px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:13px;flex:0 0 auto;color:var(--muted)}
+  .step.done .n{background:rgba(61,220,132,.18);color:var(--ok)}.step.active .n{background:rgba(90,169,255,.18);color:var(--run)}.step.fail .n{background:rgba(255,107,107,.18);color:var(--bad)}
+  .step .b{flex:1}.step .t{font-weight:600}.step .d{font-size:13px;color:var(--muted)}
+  .vid{border-top:1px solid var(--line);padding:14px 0}.vid:first-child{border-top:0;padding-top:0}
+  .vid .h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .vid .title{font-weight:700;font-size:16px;line-height:1.3}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px;color:var(--muted);margin-top:8px}
+  .kv b{color:var(--text);font-weight:500}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;text-align:center}
+  .stat .v{font-size:22px;font-weight:700}.stat .k{font-size:12px;color:var(--muted)}
+  video{width:100%;max-height:68vh;background:#000;border-radius:12px;margin-top:10px}
+  .idea{border-top:1px solid var(--line);padding:12px 0}.idea:first-child{border-top:0}
+  .idea .t{font-weight:600}.idea .h{font-size:14px;color:var(--muted);margin-top:2px}
+  nav{position:fixed;left:0;right:0;bottom:0;background:rgba(16,18,24,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+  nav button{flex:1;background:none;border:0;color:var(--muted);font-size:12px;padding:6px 0;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:2px}
+  nav button span{font-size:20px}nav button.on{color:var(--accent)}
   .hidden{display:none!important}
+  details summary{cursor:pointer;color:var(--run);font-size:14px;margin-top:8px}
+  ol.list,ul.list{margin:8px 0 0;padding-left:20px;font-size:14px;color:var(--muted)}ol.list li,ul.list li{margin:4px 0}
+  a{color:var(--run)}
+  code{background:#0d0f15;padding:1px 6px;border-radius:6px;font-size:13px}
+  .badge{display:inline-block;font-size:12px;padding:3px 9px;border-radius:999px;background:var(--card2);color:var(--muted);margin:6px 6px 0 0}
 </style>
 </head>
 <body>
-<h1>🎬 Faceless Studio <small id="repoLabel"></small></h1>
+<header>
+  <div><h1>🎬 Faceless Studio</h1><div class="sub" id="channelSub">Your faceless channel, on autopilot</div></div>
+  <span class="pill" id="connPill">Not connected</span>
+</header>
 
-<section class="card" id="setup">
-  <h2>Setup</h2>
-  <label>GitHub token (fine-grained, this repo only)</label>
-  <input id="token" type="password" placeholder="github_pat_…" autocomplete="off">
-  <div class="row">
-    <div><label>Owner</label><input id="owner" value="manikandankrish13"></div>
-    <div><label>Repository</label><input id="repo" value="youtube-ideas"></div>
+<!-- ================= CREATE ================= -->
+<section id="tab-create" class="tab">
+  <div class="card" id="needSetup">
+    <h2>Welcome 👋</h2>
+    <p class="lead">This app makes complete faceless videos for your channel: it researches what people want to watch, writes a script with a strong hook, adds a natural voice, real footage, captions, and can publish straight to YouTube.</p>
+    <p class="lead">Start in <b>Setup</b> (bottom right). It takes about 10 minutes the first time.</p>
+    <button class="btn" data-tab="setup">Go to Setup →</button>
   </div>
-  <button class="btn" id="saveBtn">Save &amp; connect</button>
-  <div class="msg" id="setupMsg"></div>
-  <details style="margin-top:10px">
-    <summary>How to create the token (2 minutes)</summary>
-    <ul class="list">
-      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
-      <li>Token name: <b>Faceless Studio</b>. Expiration: 1 year.</li>
-      <li>Repository access: <b>Only select repositories</b> → youtube-ideas</li>
-      <li>Repository permissions: <b>Actions: Read and write</b>, <b>Contents: Read-only</b>, <b>Secrets: Read-only</b> (optional, shows the checklist)</li>
-      <li>Generate, copy, paste above. It stays in this browser only.</li>
-    </ul>
-  </details>
-  <div id="secrets" class="hidden">
-    <label>Repository secrets</label>
-    <div id="secretList"></div>
+
+  <div class="card hidden" id="createCard">
+    <h2>Make a video</h2>
+    <div class="seg" id="fmt"><button data-v="short" class="on">Short · vertical · ~40 s</button><button data-v="long">Long · 16:9 · ~5 min</button></div>
+    <label>What should it be about? <span id="topicHint"></span></label>
+    <textarea id="topic" placeholder="Leave empty and the idea engine picks today's best topic. Or type one, e.g. “Why airplane windows are round”"></textarea>
+    <label>Or use a ready-made script (works without a Claude key)</label>
+    <select id="script"><option value="">— Claude writes a fresh script —</option></select>
+    <div class="row">
+      <div><label>After rendering</label>
+        <select id="afterRender"><option value="review">Review first</option><option value="upload">Upload to YouTube</option></select></div>
+      <div><label>Visibility</label>
+        <select id="privacy"><option value="">Channel default</option><option value="public">Public</option><option value="unlisted">Unlisted</option><option value="private">Private</option></select></div>
+    </div>
+    <button class="btn" id="genBtn">▶ Generate video</button>
+    <div class="msg" id="genMsg"></div>
+  </div>
+
+  <div class="card hidden" id="progressCard">
+    <h2>Rendering now</h2>
+    <p class="lead" id="progressLead"></p>
+    <div id="progressSteps"></div>
+    <a class="btn ghost sm hidden" id="progressLog" target="_blank" rel="noopener">Open detailed log</a>
   </div>
 </section>
 
-<section class="card hidden" id="generate">
-  <h2>Generate</h2>
-  <div class="seg" id="fmt">
-    <button data-v="short" class="on">Short (9:16)</button>
-    <button data-v="long">Long-form (16:9)</button>
+<!-- ================= VIDEOS ================= -->
+<section id="tab-videos" class="tab hidden">
+  <div class="stats hidden" id="stats"></div>
+  <div class="card">
+    <h2>Your videos <span class="pill" id="refreshPill" style="float:right">…</span></h2>
+    <p class="lead">Rendered videos are kept for 30 days as downloadable files. Uploaded ones are on your channel; the link appears here.</p>
+    <div id="videoList"><div class="msg">Connect in Setup to see your videos.</div></div>
   </div>
-  <label>Topic (optional, needs ANTHROPIC_API_KEY) — leave empty to let the idea engine choose</label>
-  <textarea id="topic" placeholder="e.g. Why the ocean is getting louder"></textarea>
-  <label>Or render a ready-made script</label>
-  <select id="script"><option value="">— Claude writes a fresh script —</option></select>
-  <label class="check"><input type="checkbox" id="autoUpload"> Upload to YouTube automatically after rendering</label>
-  <button class="btn" id="genBtn">▶ Generate video</button>
-  <div class="msg" id="genMsg"></div>
+  <div class="card hidden" id="previewCard"><h2>Preview</h2><div id="preview"></div></div>
 </section>
 
-<section class="card hidden" id="runs">
-  <h2>Videos <span id="refreshing" style="float:right;font-weight:400;text-transform:none;letter-spacing:0"></span></h2>
-  <div id="runList"><div class="msg">Loading…</div></div>
+<!-- ================= IDEAS ================= -->
+<section id="tab-ideas" class="tab hidden">
+  <div class="card">
+    <h2>Idea queue</h2>
+    <p class="lead">Topics the engine has researched and scored on the hook test (a “why” plus a stake). The next automatic video takes the first one. Tap any idea to make it now.</p>
+    <div id="ideaList"><div class="msg">Connect in Setup to see ideas.</div></div>
+    <button class="btn sec" id="ideasBtn">✨ Get 10 new ideas</button>
+    <div class="msg" id="ideasMsg"></div>
+  </div>
+  <div class="card">
+    <h2>Automatic schedule</h2>
+    <p class="lead" id="scheduleLead">One video is produced every day at 12:00 IST from the top of this queue and uploaded if YouTube is connected. Change the time in <code>.github/workflows/daily.yml</code>.</p>
+  </div>
 </section>
 
-<section class="card hidden" id="previewCard">
-  <h2>Preview</h2>
-  <div class="preview" id="preview"></div>
+<!-- ================= SETUP ================= -->
+<section id="tab-setup" class="tab hidden">
+  <div class="card">
+    <h2>Setup checklist</h2>
+    <p class="lead">Everything is saved securely as repository secrets. Nothing sensitive stays in this page except your GitHub token, which is kept in this browser only.</p>
+
+    <div class="step" id="s-github"><div class="n">1</div><div class="b">
+      <div class="t">Connect GitHub</div><div class="d">Lets this app start renders and save your keys.</div>
+      <div id="githubBody">
+        <input id="token" type="password" placeholder="Paste token: github_pat_…" autocomplete="off">
+        <div class="row"><div><label>Owner</label><input id="owner" value="manikandankrish13"></div><div><label>Repository</label><input id="repo" value="youtube-ideas"></div></div>
+        <button class="btn sm" id="saveBtn">Connect</button><button class="btn ghost sm hidden" id="forgetBtn">Forget token</button>
+        <div class="msg" id="setupMsg"></div>
+        <details><summary>How to create the token (2 min)</summary><ol class="list">
+          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
+          <li>Name <b>Faceless Studio</b>, expiration 1 year</li>
+          <li>Repository access: <b>Only select repositories</b> → <b>youtube-ideas</b></li>
+          <li>Repository permissions: <b>Actions: Read and write</b> · <b>Contents: Read-only</b> · <b>Secrets: Read and write</b></li>
+          <li>Generate → copy → paste above</li></ol></details>
+      </div></div></div>
+
+    <div class="step" id="s-claude"><div class="n">2</div><div class="b">
+      <div class="t">Claude API key <span class="pill" id="p-claude">not set</span></div>
+      <div class="d">Writes the scripts and ideas. A few cents per video. Get it at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</div>
+      <div class="row"><input id="k-ANTHROPIC_API_KEY" type="password" placeholder="sk-ant-…" autocomplete="off"><button class="btn sm" data-save="ANTHROPIC_API_KEY">Save</button></div>
+    </div></div>
+
+    <div class="step" id="s-pexels"><div class="n">3</div><div class="b">
+      <div class="t">Stock footage <span class="pill" id="p-pexels">not set</span></div>
+      <div class="d">Free keys give real moving footage instead of photos. <a href="https://www.pexels.com/api/new/" target="_blank" rel="noopener">Pexels key</a> · <a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener">Pixabay key</a> (optional)</div>
+      <div class="row"><input id="k-PEXELS_API_KEY" type="password" placeholder="Pexels key" autocomplete="off"><button class="btn sm" data-save="PEXELS_API_KEY">Save</button></div>
+      <div class="row"><input id="k-PIXABAY_API_KEY" type="password" placeholder="Pixabay key (optional)" autocomplete="off"><button class="btn sm" data-save="PIXABAY_API_KEY">Save</button></div>
+    </div></div>
+
+    <div class="step" id="s-yt"><div class="n">4</div><div class="b">
+      <div class="t">Connect YouTube <span class="pill" id="p-yt">not connected</span></div>
+      <div class="d">Needed only for uploading. Three short parts.</div>
+
+      <label><b>4a.</b> Paste your Google OAuth client file (client_secret…json)</label>
+      <details><summary>How to get it (5 min, once)</summary><ol class="list">
+        <li>Open <a href="https://console.cloud.google.com/projectcreate" target="_blank" rel="noopener">console.cloud.google.com/projectcreate</a>, name it “Faceless”, Create.</li>
+        <li><a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener">Enable the YouTube Data API v3</a>.</li>
+        <li><a href="https://console.cloud.google.com/auth/overview" target="_blank" rel="noopener">OAuth consent</a>: External, add your own Gmail as a test user.</li>
+        <li><a href="https://console.cloud.google.com/apis/credentials/oauthclient" target="_blank" rel="noopener">Create OAuth client</a>: type <b>Desktop app</b>. Tap <b>Download JSON</b>.</li>
+        <li>Open the downloaded file, select all, copy, paste below.</li></ol></details>
+      <textarea id="k-YOUTUBE_CLIENT_SECRET_JSON" placeholder='{"installed":{"client_id":"…' autocomplete="off"></textarea>
+      <button class="btn sm" data-save="YOUTUBE_CLIENT_SECRET_JSON">Save client file</button>
+      <div class="msg" id="ytClientMsg"></div>
+
+      <label><b>4b.</b> Sign in with the Google account that owns the channel</label>
+      <button class="btn sm sec" id="ytSignIn" disabled>Open Google sign-in</button>
+      <div class="msg">Google will end on a page that says it can’t connect to <b>localhost</b>. That is expected. Copy the full address from the address bar.</div>
+
+      <label><b>4c.</b> Paste that address here</label>
+      <input id="ytRedirect" placeholder="http://localhost:1/?state=…&code=…" autocomplete="off">
+      <button class="btn sm" id="ytFinish" disabled>Finish connecting</button>
+      <div class="msg" id="ytMsg"></div>
+    </div></div>
+
+    <div class="step" id="s-ytkey"><div class="n">5</div><div class="b">
+      <div class="t">YouTube research key <span class="pill" id="p-ytkey">optional</span></div>
+      <div class="d">Lets the idea engine study top fact channels before YouTube is connected. In the same Google project: Credentials → Create credentials → <b>API key</b>.</div>
+      <div class="row"><input id="k-YOUTUBE_API_KEY" type="password" placeholder="AIza…" autocomplete="off"><button class="btn sm" data-save="YOUTUBE_API_KEY">Save</button></div>
+    </div></div>
+  </div>
+  <div class="card"><h2>Links</h2><ul class="list" id="links"></ul></div>
 </section>
+
+<nav>
+  <button data-tab="create" class="on"><span>🎬</span>Create</button>
+  <button data-tab="videos"><span>📼</span>Videos</button>
+  <button data-tab="ideas"><span>💡</span>Ideas</button>
+  <button data-tab="setup"><span>⚙️</span>Setup</button>
+</nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/libsodium-wrappers@0.7.15/dist/browsers/sodium.js" async></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
   const API = "https://api.github.com";
-  const state = { token: "", owner: "", repo: "", format: "short", timer: null, dispatched: JSON.parse(localStorage.getItem("fs.dispatched") || "[]") };
+  const NEED = { ANTHROPIC_API_KEY: "claude", PEXELS_API_KEY: "pexels", YOUTUBE_CLIENT_SECRET_JSON: "ytclient", YOUTUBE_TOKEN_JSON: "yt", YOUTUBE_API_KEY: "ytkey" };
+  const S = { token: "", owner: "", repo: "", branch: "main", format: "short", secrets: new Set(), runs: [], history: [], queue: [], perf: null, clientId: "", timer: null, busy: false,
+              dispatched: JSON.parse(localStorage.getItem("fs.dispatched") || "[]") };
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const msg = (id, text, cls = "") => { const el = $(id); if (!el) return; el.textContent = text; el.className = "msg " + cls; };
+  const store = (k, v) => { try { localStorage.setItem("fs." + k, v); } catch (e) {} };
+  const read = (k) => { try { return localStorage.getItem("fs." + k) || ""; } catch (e) { return ""; } };
 
-  // ---------- storage ----------
-  const load = () => {
-    try {
-      state.token = localStorage.getItem("fs.token") || "";
-      state.owner = localStorage.getItem("fs.owner") || $("owner").value;
-      state.repo = localStorage.getItem("fs.repo") || $("repo").value;
-    } catch (e) {}
-    $("token").value = state.token; $("owner").value = state.owner; $("repo").value = state.repo;
-  };
-  const save = () => {
-    state.token = $("token").value.trim(); state.owner = $("owner").value.trim(); state.repo = $("repo").value.trim();
-    try { localStorage.setItem("fs.token", state.token); localStorage.setItem("fs.owner", state.owner); localStorage.setItem("fs.repo", state.repo); } catch (e) {}
-  };
-
-  // ---------- github api ----------
+  // ---------- GitHub API ----------
   async function gh(path, opts = {}) {
-    const res = await fetch(API + path, {
-      ...opts,
-      headers: { Authorization: "Bearer " + state.token, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", ...(opts.headers || {}) },
-    });
+    const res = await fetch(API + path, { ...opts, headers: { Authorization: "Bearer " + S.token, Accept: opts.raw ? "application/vnd.github.raw" : "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", ...(opts.headers || {}) } });
     if (res.status === 204) return null;
     const text = await res.text();
+    if (opts.raw) { if (!res.ok) { const e = new Error(res.statusText); e.status = res.status; throw e; } return text; }
     let data = null; try { data = text ? JSON.parse(text) : null; } catch (e) { data = text; }
     if (!res.ok) { const err = new Error((data && data.message) || res.statusText); err.status = res.status; throw err; }
     return data;
   }
-  const R = () => `/repos/${state.owner}/${state.repo}`;
-  const msg = (id, text, cls = "") => { const el = $(id); el.textContent = text; el.className = "msg " + cls; };
+  const R = () => `/repos/${S.owner}/${S.repo}`;
+  const dispatch = (wf, inputs) => gh(R() + `/actions/workflows/${wf}/dispatches`, { method: "POST", body: JSON.stringify({ ref: S.branch, inputs }) });
+  const explain = (e) => e.status === 401 ? "The token is invalid or expired." : e.status === 403 ? "The token lacks a permission (check Actions: read/write and Secrets: read/write)." : e.status === 404 ? "Not found: the token may not include this repository, or the workflow is not on the main branch yet." : e.message;
 
-  // ---------- setup ----------
-  async function connect() {
-    save();
-    if (!state.token) { msg("setupMsg", "Paste a token first.", "err"); return; }
-    msg("setupMsg", "Connecting…");
-    try {
-      const repo = await gh(R());
-      $("repoLabel").textContent = repo.full_name;
-      msg("setupMsg", "Connected. Default branch: " + repo.default_branch, "ok");
-      state.branch = repo.default_branch;
-      ["generate", "runs"].forEach((id) => $(id).classList.remove("hidden"));
-      loadScripts(); loadSecrets(); refresh(); schedule();
-    } catch (e) {
-      msg("setupMsg", "Could not connect: " + e.message + (e.status === 401 ? " (bad token)" : e.status === 404 ? " (token has no access to this repo)" : ""), "err");
-    }
+  // ---------- secrets (libsodium sealed box) ----------
+  async function sodiumReady() {
+    for (let i = 0; i < 60 && (typeof sodium === "undefined" || !sodium.ready); i++) await new Promise((r) => setTimeout(r, 100));
+    if (typeof sodium === "undefined") throw new Error("Encryption library did not load. Check your connection and reload.");
+    await sodium.ready;
   }
-  async function loadScripts() {
-    try {
-      const files = await gh(R() + "/contents/examples");
-      const sel = $("script");
-      files.filter((f) => f.name.endsWith(".json")).forEach((f) => { const o = document.createElement("option"); o.value = f.path; o.textContent = f.name.replace(".json", "").replace(/-/g, " "); sel.appendChild(o); });
-    } catch (e) {}
+  async function putSecret(name, value) {
+    await sodiumReady();
+    const pk = await gh(R() + "/actions/secrets/public-key");
+    const sealed = sodium.crypto_box_seal(sodium.from_string(value), sodium.from_base64(pk.key, sodium.base64_variants.ORIGINAL));
+    await gh(R() + `/actions/secrets/${name}`, { method: "PUT", body: JSON.stringify({ encrypted_value: sodium.to_base64(sealed, sodium.base64_variants.ORIGINAL), key_id: pk.key_id }) });
   }
   async function loadSecrets() {
-    const need = ["ANTHROPIC_API_KEY", "PEXELS_API_KEY", "PIXABAY_API_KEY", "YOUTUBE_API_KEY", "YOUTUBE_CLIENT_SECRET_JSON", "YOUTUBE_TOKEN_JSON"];
+    try { const d = await gh(R() + "/actions/secrets?per_page=100"); S.secrets = new Set(d.secrets.map((s) => s.name)); }
+    catch (e) { S.secrets = new Set(); }
+    renderSetup();
+  }
+
+  // ---------- setup rendering ----------
+  function renderSetup() {
+    const has = (n) => S.secrets.has(n);
+    const pill = (id, ok, okText, noText, cls = "bad") => { const p = $(id); p.textContent = ok ? okText : noText; p.className = "pill " + (ok ? "ok" : cls); };
+    pill("p-claude", has("ANTHROPIC_API_KEY"), "saved", "not set");
+    pill("p-pexels", has("PEXELS_API_KEY") || has("PIXABAY_API_KEY"), "saved", "not set", "warn");
+    pill("p-yt", has("YOUTUBE_TOKEN_JSON"), "connected", has("YOUTUBE_CLIENT_SECRET_JSON") ? "client saved, sign in next" : "not connected", "warn");
+    pill("p-ytkey", has("YOUTUBE_API_KEY"), "saved", "optional", "");
+    $("s-github").className = "step " + (S.token && S.connected ? "done" : "active");
+    $("s-claude").className = "step " + (has("ANTHROPIC_API_KEY") ? "done" : "");
+    $("s-pexels").className = "step " + (has("PEXELS_API_KEY") || has("PIXABAY_API_KEY") ? "done" : "");
+    $("s-yt").className = "step " + (has("YOUTUBE_TOKEN_JSON") ? "done" : has("YOUTUBE_CLIENT_SECRET_JSON") ? "active" : "");
+    $("s-ytkey").className = "step " + (has("YOUTUBE_API_KEY") ? "done" : "");
+    S.clientId = read("clientId");
+    $("ytSignIn").disabled = !S.clientId;
+    $("ytFinish").disabled = !has("YOUTUBE_CLIENT_SECRET_JSON");
+    $("topicHint").textContent = has("ANTHROPIC_API_KEY") ? "" : "(needs the Claude key from Setup)";
+    $("links").innerHTML = [
+      [`https://github.com/${S.owner}/${S.repo}/actions`, "All runs and logs on GitHub"],
+      [`https://github.com/${S.owner}/${S.repo}/settings/secrets/actions`, "Secrets on GitHub"],
+      [`https://github.com/${S.owner}/${S.repo}/blob/main/config/channel.yaml`, "Channel config (niche, voice, captions)"],
+      [`https://github.com/${S.owner}/${S.repo}/blob/main/docs/GROWTH_PLAYBOOK.md`, "Growth playbook"],
+      ["https://studio.youtube.com", "YouTube Studio"],
+    ].map(([u, t]) => `<li><a href="${u}" target="_blank" rel="noopener">${t}</a></li>`).join("");
+  }
+  async function saveSecret(name) {
+    const el = $("k-" + name); const value = el.value.trim();
+    const out = name === "YOUTUBE_CLIENT_SECRET_JSON" ? "ytClientMsg" : "setupMsg";
+    if (!value) { msg(out, "Nothing to save.", "err"); return; }
+    if (name === "YOUTUBE_CLIENT_SECRET_JSON") {
+      try { const d = JSON.parse(value); const c = d.installed || d.web; if (!c || !c.client_id) throw 0; store("clientId", c.client_id); }
+      catch (e) { msg(out, "That does not look like a Google OAuth client JSON (it should contain \"installed\" → \"client_id\").", "err"); return; }
+    }
+    msg(out, "Saving…");
+    try { await putSecret(name, value); el.value = ""; msg(out, name + " saved.", "ok"); await loadSecrets(); }
+    catch (e) { msg(out, "Could not save: " + explain(e), "err"); }
+  }
+
+  // ---------- YouTube connect ----------
+  const SCOPES = ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.readonly", "https://www.googleapis.com/auth/youtube.force-ssl"];
+  function ytSignIn() {
+    const u = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+    Object.entries({ client_id: S.clientId, redirect_uri: "http://localhost:1/", response_type: "code", scope: SCOPES.join(" "), access_type: "offline", prompt: "consent", include_granted_scopes: "true" }).forEach(([k, v]) => u.searchParams.set(k, v));
+    window.open(u.toString(), "_blank");
+    msg("ytMsg", "Sign in, tap Allow, then copy the localhost address you land on and paste it in 4c.");
+  }
+  async function ytFinish() {
+    const url = $("ytRedirect").value.trim();
+    if (!/code=/.test(url)) { msg("ytMsg", "Paste the whole address; it must contain code=…", "err"); return; }
+    $("ytFinish").disabled = true;
     try {
-      const data = await gh(R() + "/actions/secrets?per_page=100");
-      const have = new Set(data.secrets.map((s) => s.name));
-      $("secretList").innerHTML = need.map((n) => `<span class="secret ${have.has(n) ? "have" : ""}">${have.has(n) ? "✓" : "✗"} ${n}</span>`).join("") +
-        `<div class="meta" style="margin-top:6px">Add missing ones at <a target="_blank" rel="noopener" href="https://github.com/${state.owner}/${state.repo}/settings/secrets/actions">Settings → Secrets → Actions</a>. Uploading needs the two YOUTUBE_* secrets.</div>`;
-      $("secrets").classList.remove("hidden");
-    } catch (e) { $("secrets").classList.add("hidden"); }
+      msg("ytMsg", "Saving your GitHub token so the connector can store the YouTube login…");
+      await putSecret("STUDIO_GH_TOKEN", S.token);
+      msg("ytMsg", "Exchanging the code with Google (runs on GitHub, ~1 min)…");
+      await dispatch("youtube-auth.yml", { redirect_url: url });
+      for (let i = 0; i < 30; i++) {
+        await new Promise((r) => setTimeout(r, 6000));
+        const runs = (await gh(R() + "/actions/workflows/youtube-auth.yml/runs?per_page=1")).workflow_runs;
+        const run = runs[0];
+        if (run && run.status === "completed") {
+          if (run.conclusion === "success") { await loadSecrets(); if (S.secrets.has("YOUTUBE_TOKEN_JSON")) { msg("ytMsg", "YouTube connected. Uploads are enabled.", "ok"); $("ytRedirect").value = ""; return; } }
+          msg("ytMsg", "The connector failed. Usually the code was already used or expired: tap Open Google sign-in again and paste the new address. Log: " + run.html_url, "err"); return;
+        }
+        msg("ytMsg", `Connecting… (${(i + 1) * 6}s)`);
+      }
+      msg("ytMsg", "Still running; check back in a minute.", "");
+    } catch (e) { msg("ytMsg", "Failed: " + explain(e), "err"); }
+    finally { $("ytFinish").disabled = false; }
+  }
+
+  // ---------- connect ----------
+  async function connect() {
+    S.token = $("token").value.trim(); S.owner = $("owner").value.trim(); S.repo = $("repo").value.trim();
+    store("token", S.token); store("owner", S.owner); store("repo", S.repo);
+    if (!S.token) { msg("setupMsg", "Paste a token first.", "err"); return; }
+    msg("setupMsg", "Connecting…");
+    try {
+      const repo = await gh(R()); S.branch = repo.default_branch; S.connected = true;
+      $("connPill").textContent = "Connected"; $("connPill").className = "pill ok";
+      $("forgetBtn").classList.remove("hidden");
+      msg("setupMsg", "Connected to " + repo.full_name + ".", "ok");
+      $("needSetup").classList.add("hidden"); $("createCard").classList.remove("hidden");
+      await Promise.all([loadSecrets(), loadScripts(), loadChannel()]);
+      refresh(); schedule();
+    } catch (e) { S.connected = false; $("connPill").textContent = "Not connected"; $("connPill").className = "pill bad"; msg("setupMsg", "Could not connect: " + explain(e), "err"); }
+  }
+  function forget() { S.token = ""; store("token", ""); $("token").value = ""; location.reload(); }
+  async function loadScripts() {
+    try { const files = await gh(R() + "/contents/examples"); const sel = $("script"); sel.length = 1;
+      files.filter((f) => f.name.endsWith(".json")).forEach((f) => { const o = document.createElement("option"); o.value = f.path; o.textContent = f.name.replace(".json", "").replace(/-/g, " "); sel.appendChild(o); }); } catch (e) {}
+  }
+  async function loadChannel() {
+    try { const y = await gh(R() + "/contents/config/channel.yaml", { raw: true });
+      const name = (y.match(/^\s*name:\s*"?([^"\n]+)"?/m) || [])[1], niche = (y.match(/^\s*niche:\s*"?([^"\n]+)"?/m) || [])[1];
+      if (name) $("channelSub").textContent = name + (niche ? " · " + niche : ""); } catch (e) {}
   }
 
   // ---------- generate ----------
   async function generate() {
-    const script = $("script").value, topic = $("topic").value.trim(), upload = $("autoUpload").checked;
-    const inputs = { count: "1", no_upload: upload ? "false" : "true", topic: script ? "" : topic, script, config: state.format === "long" ? "config/long.yaml" : "config/channel.yaml" };
+    const script = $("script").value, topic = $("topic").value.trim(), upload = $("afterRender").value === "upload", privacy = $("privacy").value;
+    if (!script && !S.secrets.has("ANTHROPIC_API_KEY")) { msg("genMsg", "Add the Claude key in Setup, or pick a ready-made script.", "err"); return; }
+    if (upload && !S.secrets.has("YOUTUBE_TOKEN_JSON")) { msg("genMsg", "YouTube is not connected yet (Setup step 4). Choose “Save for me to review” instead.", "err"); return; }
+    const inputs = { count: "1", no_upload: upload ? "false" : "true", topic: script ? "" : topic, script, privacy, config: S.format === "long" ? "config/long.yaml" : "config/channel.yaml" };
     $("genBtn").disabled = true; msg("genMsg", "Starting…");
     try {
-      await gh(R() + "/actions/workflows/daily.yml/dispatches", { method: "POST", body: JSON.stringify({ ref: state.branch || "main", inputs }) });
+      await dispatch("daily.yml", inputs);
       const label = script ? $("script").selectedOptions[0].textContent : topic || "idea engine pick";
-      state.dispatched.unshift({ at: Date.now(), label: `${state.format === "long" ? "Long-form" : "Short"}: ${label}${upload ? " → upload" : ""}` });
-      state.dispatched = state.dispatched.slice(0, 30);
-      localStorage.setItem("fs.dispatched", JSON.stringify(state.dispatched));
-      msg("genMsg", "Queued. It appears in the list below in a few seconds. Shorts take ~3 min, long-form ~10-15 min.", "ok");
-      setTimeout(refresh, 4000); setTimeout(refresh, 12000);
-    } catch (e) {
-      msg("genMsg", "Failed: " + e.message + (e.status === 403 ? " — token needs Actions: Read and write" : e.status === 404 ? " — the workflow must exist on the default branch" : ""), "err");
-    } finally { $("genBtn").disabled = false; }
+      S.dispatched.unshift({ at: Date.now(), label: `${S.format === "long" ? "Long-form" : "Short"}: ${label}`, upload });
+      S.dispatched = S.dispatched.slice(0, 40); store("dispatched", JSON.stringify(S.dispatched));
+      msg("genMsg", "", ""); $("progressCard").classList.remove("hidden"); $("progressLead").textContent = "Queued on GitHub…"; $("progressSteps").innerHTML = "";
+      setTimeout(refresh, 5000); setTimeout(refresh, 15000);
+    } catch (e) { msg("genMsg", "Could not start: " + explain(e), "err"); }
+    finally { $("genBtn").disabled = false; }
   }
 
-  // ---------- runs ----------
-  const fmtAgo = (iso) => { const s = (Date.now() - new Date(iso)) / 1000; if (s < 90) return "just now"; if (s < 5400) return Math.round(s / 60) + " min ago"; if (s < 172800) return Math.round(s / 3600) + " h ago"; return Math.round(s / 86400) + " d ago"; };
-  const labelFor = (run) => { const t = new Date(run.created_at).getTime(); const d = state.dispatched.find((x) => Math.abs(x.at - t) < 120000); return d ? d.label : run.event === "schedule" ? "Scheduled daily video" : "Manual run"; };
+  // ---------- data refresh ----------
+  const ago = (iso) => { const s = (Date.now() - new Date(iso)) / 1000; if (s < 90) return "just now"; if (s < 5400) return Math.round(s / 60) + " min ago"; if (s < 172800) return Math.round(s / 3600) + " h ago"; return Math.round(s / 86400) + " days ago"; };
+  const labelFor = (run) => { const t = new Date(run.created_at).getTime(); const d = S.dispatched.find((x) => Math.abs(x.at - t) < 150000); return d ? d.label : run.event === "schedule" ? "Scheduled daily video" : "Manual run"; };
   async function refresh() {
-    if (!state.token) return;
-    $("refreshing").textContent = "…";
+    if (!S.token || !S.connected) return;
+    $("refreshPill").textContent = "updating…";
     try {
-      const [daily, uploads] = await Promise.all([
-        gh(R() + "/actions/workflows/daily.yml/runs?per_page=12"),
-        gh(R() + "/actions/workflows/upload.yml/runs?per_page=12").catch(() => ({ workflow_runs: [] })),
+      const [daily, uploads, history, queue, perf] = await Promise.all([
+        gh(R() + "/actions/workflows/daily.yml/runs?per_page=15"),
+        gh(R() + "/actions/workflows/upload.yml/runs?per_page=10").catch(() => ({ workflow_runs: [] })),
+        gh(R() + "/contents/data/history.json", { raw: true }).then(JSON.parse).catch(() => []),
+        gh(R() + "/contents/data/queue.json", { raw: true }).then(JSON.parse).catch(() => []),
+        gh(R() + "/contents/data/performance.json", { raw: true }).then(JSON.parse).catch(() => null),
       ]);
-      const runs = [...daily.workflow_runs, ...uploads.workflow_runs].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 15);
-      const html = runs.map((run) => {
-        const st = run.status === "completed" ? run.conclusion : run.status;
-        const isUpload = run.path.endsWith("upload.yml");
-        const title = isUpload ? "YouTube upload" : labelFor(run);
-        const done = run.status === "completed" && run.conclusion === "success";
-        return `<div class="run" data-id="${run.id}">
-          <div class="t"><span class="title">${title}</span><span class="status ${st}">${st.replace("_", " ")}</span></div>
-          <div class="meta">${fmtAgo(run.created_at)} · run #${run.run_number} · <a href="${run.html_url}" target="_blank" rel="noopener">log</a></div>
-          ${!isUpload && done ? `<button class="btn small secondary" data-act="preview" data-id="${run.id}">▶ Preview</button><button class="btn small" data-act="upload" data-id="${run.id}">⬆ Upload to YouTube</button><a class="btn small secondary" href="${run.html_url}#artifacts" target="_blank" rel="noopener">⬇ Download</a>` : ""}
-          ${run.status !== "completed" ? `<button class="btn small secondary" data-act="cancel" data-id="${run.id}">✕ Cancel</button>` : ""}
-        </div>`;
-      }).join("");
-      $("runList").innerHTML = html || '<div class="msg">No videos yet. Tap Generate.</div>';
-      state.busy = runs.some((r) => r.status !== "completed");
-    } catch (e) { $("runList").innerHTML = `<div class="msg err">${e.message}</div>`; }
-    $("refreshing").textContent = "";
+      S.runs = daily.workflow_runs; S.uploadRuns = uploads.workflow_runs; S.history = history; S.queue = queue; S.perf = perf;
+      S.busy = [...S.runs, ...S.uploadRuns].some((r) => r.status !== "completed");
+      renderVideos(); renderIdeas(); renderProgress(); renderStats();
+    } catch (e) { $("videoList").innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
+    $("refreshPill").textContent = "updated " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   }
-  function schedule() { clearInterval(state.timer); state.timer = setInterval(() => { if (state.busy || document.visibilityState === "visible") refresh(); }, state.busy ? 15000 : 45000); }
+  function schedule() { clearInterval(S.timer); S.timer = setInterval(() => { if (document.visibilityState === "visible") refresh(); }, 20000); }
 
-  // ---------- preview / upload / cancel ----------
+  // ---------- progress ----------
+  const STEP_NAMES = [["Research preview", "Researching today’s trends"], ["Produce and upload", "Writing script, voice, visuals, render"], ["Refresh performance", "Reading channel stats"], ["Keep rendered files", "Saving the video file"], ["Commit state", "Updating history"]];
+  async function renderProgress() {
+    const active = S.runs.find((r) => r.status !== "completed");
+    const card = $("progressCard");
+    if (!active) { if (!card.classList.contains("hidden") && S.runs[0]) { const r = S.runs[0]; $("progressLead").textContent = r.conclusion === "success" ? "Done. Your video is in the Videos tab." : "The run did not succeed. Open the log for details."; $("progressSteps").innerHTML = ""; $("progressLog").href = r.html_url; $("progressLog").classList.remove("hidden"); } return; }
+    card.classList.remove("hidden"); $("progressLog").href = active.html_url; $("progressLog").classList.remove("hidden");
+    $("progressLead").textContent = labelFor(active) + " · started " + ago(active.created_at);
+    try {
+      const jobs = await gh(R() + `/actions/runs/${active.id}/jobs`);
+      const steps = (jobs.jobs[0] || {}).steps || [];
+      $("progressSteps").innerHTML = STEP_NAMES.map(([key, label], i) => {
+        const st = steps.find((s) => s.name.startsWith(key));
+        const cls = !st ? "" : st.status === "completed" ? (st.conclusion === "success" || st.conclusion === "skipped" ? "done" : "fail") : st.status === "in_progress" ? "active" : "";
+        const icon = cls === "done" ? "✓" : cls === "active" ? "…" : cls === "fail" ? "!" : i + 1;
+        return `<div class="step ${cls}"><div class="n">${icon}</div><div class="b"><div class="t">${label}</div></div></div>`;
+      }).join("");
+    } catch (e) { $("progressSteps").innerHTML = `<div class="msg">Waiting for the runner…</div>`; }
+  }
+
+  // ---------- videos ----------
+  function renderStats() {
+    const p = S.perf; const box = $("stats");
+    if (!p) { box.classList.add("hidden"); return; }
+    box.classList.remove("hidden");
+    box.innerHTML = [[p.subscribers, "subscribers"], [p.total_views, "total views"], [p.video_count, "videos"]].map(([v, k]) => `<div class="stat"><div class="v">${Number(v || 0).toLocaleString()}</div><div class="k">${k}</div></div>`).join("");
+  }
+  function renderVideos() {
+    const runsDone = S.runs.filter((r) => r.status === "completed");
+    const hist = [...S.history].reverse().filter((h) => h.status !== "lost");
+    const used = new Set();
+    const cards = hist.map((h) => {
+      const t = new Date(h.created_at).getTime();
+      const run = runsDone.find((r) => !used.has(r.id) && t - new Date(r.created_at).getTime() > 0 && t - new Date(r.created_at).getTime() < 45 * 60000);
+      if (run) used.add(run.id);
+      return videoCard(h, run);
+    });
+    // runs without a history entry (failed, or history not committed yet)
+    runsDone.filter((r) => !used.has(r.id)).forEach((r) => cards.unshift(videoCard(null, r)));
+    (S.uploadRuns || []).slice(0, 3).forEach((r) => { if (r.status !== "completed" || r.conclusion !== "success") cards.unshift(`<div class="vid"><div class="h"><div class="title">YouTube upload</div>${statusPill(r)}</div><div class="kv"><span>Started</span><b>${ago(r.created_at)}</b><span>Log</span><b><a href="${r.html_url}" target="_blank" rel="noopener">open</a></b></div></div>`); });
+    $("videoList").innerHTML = cards.join("") || '<div class="msg">No videos yet. Make one in Create.</div>';
+  }
+  const statusPill = (run) => { const st = run.status === "completed" ? run.conclusion : run.status; const cls = st === "success" ? "ok" : st === "failure" || st === "cancelled" ? "bad" : "run"; return `<span class="pill ${cls}">${st.replace("_", " ")}</span>`; };
+  function videoCard(h, run) {
+    const status = h ? h.status : run.conclusion === "success" ? "rendered" : run.conclusion;
+    const pillCls = { uploaded: "ok", rendered: "run", needs_review: "warn", pending_upload: "warn", failure: "bad", cancelled: "bad" }[status] || "";
+    const pillText = { uploaded: "on YouTube", rendered: "ready to review", needs_review: "needs review", pending_upload: "waiting for quota", failure: "failed", cancelled: "cancelled" }[status] || status;
+    const title = h ? h.title : labelFor(run);
+    const kv = [];
+    if (h) {
+      if (h.duration) kv.push(["Length", `${Math.floor(h.duration / 60)}:${String(Math.round(h.duration % 60)).padStart(2, "0")}`]);
+      if (h.voice_provider) kv.push(["Voice", { edge: "neural (edge)", gtts: "Google TTS", espeak: "offline test voice", silent: "none" }[h.voice_provider] || h.voice_provider]);
+      if (h.visual_sources && h.visual_sources.length) kv.push(["Visuals", h.visual_sources.join(", ")]);
+      if (h.publish_at) kv.push(["Publishes", new Date(h.publish_at).toLocaleString()]);
+      if (h.offline) kv.push(["Note", "template script (offline mode)"]);
+      if (h.status === "needs_review") kv.push(["Why review", h.offline ? "no Claude key: template script" : "voice fell back below publish quality"]);
+    }
+    kv.push(["When", ago(h ? h.created_at : run.created_at)]);
+    if (run) kv.push(["Log", `<a href="${run.html_url}" target="_blank" rel="noopener">open on GitHub</a>`]);
+    const actions = [];
+    if (h && h.url) actions.push(`<a class="btn sm" href="${h.url}" target="_blank" rel="noopener">▶ Open on YouTube</a>`);
+    if (run && run.conclusion === "success") {
+      actions.push(`<button class="btn sm sec" data-act="preview" data-id="${run.id}">👁 Preview</button>`);
+      if (!(h && h.url)) actions.push(`<button class="btn sm" data-act="upload" data-id="${run.id}">⬆ Upload to YouTube</button>`);
+      actions.push(`<a class="btn sm ghost" href="${run.html_url}#artifacts" target="_blank" rel="noopener">⬇ Download</a>`);
+    }
+    return `<div class="vid"><div class="h"><div class="title">${esc(title)}</div><span class="pill ${pillCls}">${pillText}</span></div>
+      <div class="kv">${kv.map(([k, v]) => `<span>${k}</span><b>${v}</b>`).join("")}</div>${actions.join("")}</div>`;
+  }
   async function preview(id) {
     $("previewCard").classList.remove("hidden"); $("previewCard").scrollIntoView({ behavior: "smooth" });
-    const box = $("preview"); box.innerHTML = '<div class="msg">Fetching the video… (Shorts ~15 MB)</div>';
+    const box = $("preview"); box.innerHTML = '<div class="msg">Fetching the video… Shorts ~15 MB, long-form ~100 MB.</div>';
     try {
       const arts = await gh(R() + `/actions/runs/${id}/artifacts`);
       const art = arts.artifacts.find((a) => a.name.startsWith("videos-")) || arts.artifacts[0];
-      if (!art) throw new Error("No artifact on this run (it may have expired after 7 days).");
-      const res = await fetch(art.archive_download_url, { headers: { Authorization: "Bearer " + state.token } });
+      if (!art) throw new Error("This video's file has expired (kept 30 days) or the run produced none.");
+      if (typeof JSZip === "undefined") throw new Error("Preview library did not load; use Download instead.");
+      const res = await fetch(art.archive_download_url, { headers: { Authorization: "Bearer " + S.token } });
       if (!res.ok) throw new Error("Download failed: " + res.status);
       const zip = await JSZip.loadAsync(await res.blob());
       const find = (suffix) => Object.values(zip.files).find((f) => !f.dir && f.name.endsWith(suffix));
       const vf = find("video.mp4"), mf = find("metadata.json"), tf = find("thumbnail.jpg");
-      if (!vf) throw new Error("video.mp4 not found in the artifact");
+      if (!vf) throw new Error("video.mp4 not found in the file");
       const meta = mf ? JSON.parse(await mf.async("string")) : {};
       const url = URL.createObjectURL(new Blob([await vf.async("uint8array")], { type: "video/mp4" }));
       const thumb = tf ? URL.createObjectURL(new Blob([await tf.async("uint8array")], { type: "image/jpeg" })) : "";
-      box.innerHTML = `<h3>${meta.title || "Video"}</h3>
+      const sc = (meta.script || {});
+      box.innerHTML = `<div class="title" style="font-weight:700">${esc(meta.title || "Video")}</div>
         <video controls playsinline ${thumb ? `poster="${thumb}"` : ""} src="${url}"></video>
-        <p>${(meta.description || "").slice(0, 600)}</p>
-        <div class="meta" style="margin-top:8px">${(meta.tags || []).slice(0, 8).map((t) => "#" + t.replace(/\s+/g, "")).join(" ")}</div>
+        <details open><summary>Description</summary><div class="msg">${esc(meta.description || "")}</div></details>
+        <details><summary>Script (${(sc.scenes || []).length} scenes)</summary><div class="msg">${(sc.scenes || []).map((s, i) => `${i + 1}. ${esc(s.text)}`).join("\n")}</div></details>
+        <div>${(meta.tags || []).slice(0, 10).map((t) => `<span class="badge">#${esc(t.replace(/\s+/g, ""))}</span>`).join("")}</div>
         <button class="btn" data-act="upload" data-id="${id}">⬆ Upload this to YouTube</button>
-        <a class="btn secondary" href="${url}" download="video.mp4">Save video to phone</a>`;
-    } catch (e) { box.innerHTML = `<div class="msg err">${e.message}</div><div class="msg">You can always download it from the run page under Artifacts.</div>`; }
+        <a class="btn sec" href="${url}" download="video.mp4">Save video to phone</a>`;
+    } catch (e) { box.innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
   }
   async function uploadRun(id) {
-    if (!confirm("Upload this video to your YouTube channel now?")) return;
-    try {
-      await gh(R() + "/actions/workflows/upload.yml/dispatches", { method: "POST", body: JSON.stringify({ ref: state.branch || "main", inputs: { run_id: String(id), privacy: "" } }) });
-      alert("Upload started. It appears in the list as 'YouTube upload' and takes about a minute.");
-      setTimeout(refresh, 4000);
-    } catch (e) { alert("Could not start upload: " + e.message + (e.status === 404 ? "\nThe upload workflow must be on the default branch." : "")); }
-  }
-  async function cancelRun(id) {
-    if (!confirm("Cancel this run?")) return;
-    try { await gh(R() + `/actions/runs/${id}/cancel`, { method: "POST" }); setTimeout(refresh, 3000); } catch (e) { alert(e.message); }
+    if (!S.secrets.has("YOUTUBE_TOKEN_JSON")) { alert("YouTube is not connected yet. Finish Setup step 4 first."); return; }
+    const privacy = prompt("Visibility: public, unlisted or private? (leave empty for channel default)", "") ?? null;
+    if (privacy === null) return;
+    try { await dispatch("upload.yml", { run_id: String(id), privacy: privacy.trim() }); alert("Upload started. It shows up in Videos as “YouTube upload” and takes about a minute."); setTimeout(refresh, 5000); }
+    catch (e) { alert("Could not start upload: " + explain(e)); }
   }
 
-  // ---------- wiring ----------
-  $("saveBtn").onclick = connect;
-  $("genBtn").onclick = generate;
-  $("fmt").onclick = (e) => { const b = e.target.closest("button"); if (!b) return; state.format = b.dataset.v; [...$("fmt").children].forEach((x) => x.classList.toggle("on", x === b)); };
+  // ---------- ideas ----------
+  function renderIdeas() {
+    const q = S.queue || [];
+    $("ideaList").innerHTML = q.length ? q.slice(0, 25).map((i, n) => `<div class="idea" data-act="use" data-topic="${esc(i.topic)}">
+        <div class="t">${n + 1}. ${esc(i.topic)}</div><div class="h">${esc(i.hook || "")}</div>
+        <div>${i.flavour ? `<span class="badge">${esc(i.flavour.replace("_", " "))}</span>` : ""}${i.hook_score ? `<span class="badge">hook ${i.hook_score}/10</span>` : ""}${i.stake ? `<span class="badge">stake: ${esc(i.stake)}</span>` : ""}</div></div>`).join("")
+      : '<div class="msg">The queue is empty. Tap “Get 10 new ideas” (needs the Claude key), or the next daily run fills it automatically.</div>';
+  }
+  async function newIdeas() {
+    if (!S.secrets.has("ANTHROPIC_API_KEY")) { msg("ideasMsg", "Add the Claude key in Setup first.", "err"); return; }
+    $("ideasBtn").disabled = true; msg("ideasMsg", "Researching and generating… about 2 minutes. This list updates on its own.");
+    try { await dispatch("ideas.yml", { count: "10" }); setTimeout(refresh, 60000); setTimeout(refresh, 120000); setTimeout(refresh, 180000); }
+    catch (e) { msg("ideasMsg", "Could not start: " + explain(e), "err"); }
+    finally { setTimeout(() => ($("ideasBtn").disabled = false), 5000); }
+  }
+  function useIdea(topic) { $("topic").value = topic; $("script").value = ""; showTab("create"); $("topic").scrollIntoView({ behavior: "smooth" }); }
+
+  // ---------- tabs & wiring ----------
+  function showTab(name) {
+    document.querySelectorAll(".tab").forEach((t) => t.classList.toggle("hidden", t.id !== "tab-" + name));
+    document.querySelectorAll("nav button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name));
+    window.scrollTo({ top: 0 });
+  }
   document.body.addEventListener("click", (e) => {
-    const b = e.target.closest("[data-act]"); if (!b) return;
-    ({ preview, upload: uploadRun, cancel: cancelRun })[b.dataset.act](b.dataset.id);
+    const tabBtn = e.target.closest("[data-tab]"); if (tabBtn) { showTab(tabBtn.dataset.tab); return; }
+    const save = e.target.closest("[data-save]"); if (save) { saveSecret(save.dataset.save); return; }
+    const act = e.target.closest("[data-act]"); if (!act) return;
+    if (act.dataset.act === "preview") preview(act.dataset.id);
+    else if (act.dataset.act === "upload") uploadRun(act.dataset.id);
+    else if (act.dataset.act === "use") useIdea(act.dataset.topic);
   });
+  $("saveBtn").onclick = connect; $("forgetBtn").onclick = forget; $("genBtn").onclick = generate;
+  $("ytSignIn").onclick = ytSignIn; $("ytFinish").onclick = ytFinish; $("ideasBtn").onclick = newIdeas;
+  $("fmt").onclick = (e) => { const b = e.target.closest("button"); if (!b) return; S.format = b.dataset.v; [...$("fmt").children].forEach((x) => x.classList.toggle("on", x === b)); };
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") refresh(); });
-  load(); if (state.token) connect();
+
+  // boot
+  $("token").value = read("token"); $("owner").value = read("owner") || $("owner").value; $("repo").value = read("repo") || $("repo").value;
+  renderSetup();
+  if (read("token")) connect(); else showTab("setup");
 })();
 </script>
 </body>
