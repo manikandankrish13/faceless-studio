@@ -287,12 +287,18 @@
 
   <details class="stepc" id="s-yt"><summary><div class="n">4</div><div class="st"><div class="t">Connect YouTube</div><div class="d">Needed for uploading · three short parts</div></div><span class="chip" id="p-yt">To do</span></summary><div class="body">
     <label>4a · Google OAuth client file</label>
-    <details class="help" style="margin-top:0"><summary>How to get it (5 min, once)</summary><ol class="list">
-      <li><a href="https://console.cloud.google.com/projectcreate" target="_blank" rel="noopener">Create a Google Cloud project</a> named "Faceless".</li>
-      <li><a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener">Enable the YouTube Data API v3</a>.</li>
-      <li><a href="https://console.cloud.google.com/auth/overview" target="_blank" rel="noopener">OAuth consent screen</a>: External, add your own Gmail as a test user.</li>
-      <li><a href="https://console.cloud.google.com/apis/credentials/oauthclient" target="_blank" rel="noopener">Create an OAuth client</a>, type <b>Desktop app</b>, then <b>Download JSON</b>.</li>
-      <li>Open the file, select all, copy, paste below.</li></ol></details>
+    <details class="help" style="margin-top:0"><summary>How to get it (5 min, once)</summary>
+      <p class="note"><b>Before you start:</b> open these links in <b>Safari itself</b>, not from the home-screen icon. In Safari tap the <b>aA</b> button in the address bar and choose <b>Request Desktop Website</b>: Google's console only works properly that way. Each link below first asks which Google account to use; pick the one that owns the channel.</p>
+      <ol class="list">
+        <li><a href="https://accounts.google.com/AccountChooser?continue=https%3A%2F%2Fconsole.cloud.google.com%2Fprojectcreate" target="_blank" rel="noopener">Create a project</a>: name it <b>Faceless</b>, tap Create, wait for the notification, then tap <b>Select project</b>.</li>
+        <li><a href="https://accounts.google.com/AccountChooser?continue=https%3A%2F%2Fconsole.cloud.google.com%2Fapis%2Flibrary%2Fyoutube.googleapis.com" target="_blank" rel="noopener">Enable YouTube Data API v3</a>: make sure "Faceless" shows at the top, tap <b>Enable</b>.</li>
+        <li><a href="https://accounts.google.com/AccountChooser?continue=https%3A%2F%2Fconsole.cloud.google.com%2Fauth%2Foverview" target="_blank" rel="noopener">Google Auth Platform</a>: tap <b>Get started</b>. App name <b>Faceless</b>, support email = your Gmail, Audience <b>External</b>, contact email = your Gmail, agree, <b>Create</b>.</li>
+        <li>Still there, open <a href="https://accounts.google.com/AccountChooser?continue=https%3A%2F%2Fconsole.cloud.google.com%2Fauth%2Faudience" target="_blank" rel="noopener">Audience</a> → <b>Test users</b> → <b>Add users</b> → your Gmail → Save.</li>
+        <li><a href="https://accounts.google.com/AccountChooser?continue=https%3A%2F%2Fconsole.cloud.google.com%2Fauth%2Fclients%2Fcreate" target="_blank" rel="noopener">Create OAuth client</a>: Application type <b>Desktop app</b>, name <b>Faceless Studio</b>, <b>Create</b>, then <b>Download JSON</b>.</li>
+        <li>Open the downloaded file (Files app → Downloads), tap and hold the text → Select All → Copy, paste below.</li>
+      </ol>
+      <p class="note">If you have access to any computer for 10 minutes, this step is much easier there. Everything else in this app is phone-friendly.</p>
+    </details>
     <textarea id="k-YOUTUBE_CLIENT_SECRET_JSON" placeholder='{"installed":{"client_id":"…' autocomplete="off" style="margin-top:var(--s2)"></textarea>
     <button class="btn sm" data-save="YOUTUBE_CLIENT_SECRET_JSON" style="margin-top:var(--s2)">Save client file</button>
     <div class="note" id="ytClientMsg"></div>
