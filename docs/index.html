@@ -251,7 +251,8 @@
 <!-- ================= IDEAS ================= -->
 <section id="tab-ideas" class="tab hidden">
   <h1 class="t-page">Ideas</h1>
-  <p class="t-sub" style="margin-bottom:var(--s3)">Researched topics, scored on the hook test: a "why" plus a stake. The daily video takes the top one.</p>
+  <p class="t-sub" style="margin-bottom:var(--s2)">Researched topics, scored on the hook test: a "why" plus a stake. The daily video takes the top one.</p>
+  <div class="vrow" id="ideasSources" style="margin-bottom:var(--s3)"></div>
   <div class="card"><div id="ideaList"><div class="skel"></div></div><button class="btn soft" id="ideasBtn" style="margin-top:var(--s3)"><svg class="ic"><use href="#i-spark"/></svg> Get 10 new ideas</button><div class="note" id="ideasMsg"></div></div>
   <div class="card"><h2 class="t-card">Automatic schedule</h2><p class="t-sub" style="margin:0">One video every day at 12:00 IST from the top of this list, uploaded when YouTube is connected. Change the time in <code>.github/workflows/daily.yml</code>.</p></div>
 </section>
@@ -315,6 +316,11 @@
   <details class="stepc" id="s-ytkey"><summary><div class="n">5</div><div class="st"><div class="t">YouTube research key</div><div class="d">Optional · studies top channels before YouTube is connected</div></div><span class="chip" id="p-ytkey">Optional</span></summary><div class="body">
     <p class="note">In the same Google project: Credentials → Create credentials → <b>API key</b>.</p>
     <div class="inline" style="margin-top:var(--s2)"><input id="k-YOUTUBE_API_KEY" type="password" placeholder="AIza…" autocomplete="off"><button class="btn" data-save="YOUTUBE_API_KEY">Save</button></div>
+  </div></details>
+
+  <details class="stepc" id="s-vidiq"><summary><div class="n">6</div><div class="st"><div class="t">vidIQ</div><div class="d">Optional · keyword demand, outliers and competitors inside idea research</div></div><span class="chip" id="p-vidiq">Optional</span></summary><div class="body">
+    <p class="note">Works on vidIQ's Free plan. In vidIQ open <a href="https://vidiq.com/mcp/" target="_blank" rel="noopener">vidiq.com/mcp</a> → create an <b>API key</b> for MCP, paste it here. Claude then checks search demand and finds outlier videos before choosing topics.</p>
+    <div class="inline" style="margin-top:var(--s2)"><input id="k-VIDIQ_API_KEY" type="password" placeholder="vidIQ MCP API key" autocomplete="off"><button class="btn" data-save="VIDIQ_API_KEY">Save</button></div>
   </div></details>
 
   <div class="card" style="margin-top:var(--s4)"><h2 class="t-card">Links</h2><ul class="list" id="links"></ul></div>
@@ -396,6 +402,9 @@
     chip("p-pexels", has("PEXELS_API_KEY") || has("PIXABAY_API_KEY"), "Saved", "Recommended", "warn");
     chip("p-yt", has("YOUTUBE_TOKEN_JSON"), "Connected", has("YOUTUBE_CLIENT_SECRET_JSON") ? "Sign in next" : "To do", "warn");
     chip("p-ytkey", has("YOUTUBE_API_KEY"), "Saved", "Optional", "");
+    chip("p-vidiq", has("VIDIQ_API_KEY"), "Connected", "Optional", "");
+    $("s-vidiq").classList.toggle("done", has("VIDIQ_API_KEY"));
+    $("ideasSources").innerHTML = ["Wikipedia trends", has("YOUTUBE_API_KEY") || has("YOUTUBE_TOKEN_JSON") ? "YouTube top videos" : null, has("VIDIQ_API_KEY") ? "vidIQ keyword + outlier data" : null].filter(Boolean).map((x) => `<span class="chip ok">${x}</span>`).join(" ") + (has("VIDIQ_API_KEY") ? "" : ` <span class="chip" data-tab="setup" style="cursor:pointer">+ vidIQ</span>`);
     const states = { "s-github": S.connected, "s-claude": has("ANTHROPIC_API_KEY"), "s-pexels": has("PEXELS_API_KEY") || has("PIXABAY_API_KEY"), "s-yt": has("YOUTUBE_TOKEN_JSON"), "s-ytkey": has("YOUTUBE_API_KEY") };
     let activeSet = false;
     Object.entries(states).forEach(([id, done]) => {
@@ -669,7 +678,8 @@
     const q = S.queue || [];
     $("ideaList").innerHTML = q.length ? q.slice(0, 25).map((i, n) => `<div class="idea" data-act="use" data-topic="${esc(i.topic)}"><div class="rank">${n + 1}</div><div style="min-width:0;flex:1">
         <div class="t">${esc(i.topic)}</div><div class="h">${esc(i.hook || "")}</div>
-        ${i.hook_score ? `<div class="score">Hook ${i.hook_score}/10 <i><b style="width:${i.hook_score * 10}%"></b></i>${i.flavour ? " · " + esc(i.flavour.replace("_", " ")) : ""}</div>` : ""}</div>${icon("chev", "ic")}</div>`).join("")
+        ${i.hook_score ? `<div class="score">Hook ${i.hook_score}/10 <i><b style="width:${i.hook_score * 10}%"></b></i>${i.flavour ? " · " + esc(i.flavour.replace("_", " ")) : ""}</div>` : ""}
+        ${i.evidence ? `<div class="t-cap" style="margin-top:4px">${esc(i.evidence)}</div>` : ""}</div>${icon("chev", "ic")}</div>`).join("")
       : `<div class="empty"><div class="ib">${icon("bulb")}</div><b>No ideas yet</b>Tap “Get 10 new ideas” (needs the Claude key). The daily run also fills this list.</div>`;
   }
   async function newIdeas() {
