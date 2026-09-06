@@ -303,6 +303,7 @@
     <button class="btn sm" data-save="YOUTUBE_CLIENT_SECRET_JSON" style="margin-top:var(--s2)">Save client file</button>
     <div class="note" id="ytClientMsg"></div>
     <label>4b · Sign in with the Google account that owns the channel</label>
+    <p class="note" id="ytNeedClient" style="display:none;color:var(--warn)">The client file is saved on GitHub but this phone does not have its ID yet. Paste the file in 4a once more and tap Save to enable sign-in here.</p>
     <button class="btn soft" id="ytSignIn" disabled>Open Google sign-in <svg class="ic sm"><use href="#i-ext"/></svg></button>
     <p class="note">Google ends on a page that says it can't connect to <b>localhost</b>. That is expected: copy the whole address from the address bar.</p>
     <label>4c · Paste that address</label>
@@ -402,6 +403,7 @@
       if (!done && !activeSet && id !== "s-ytkey") { el.classList.add("active"); activeSet = true; if (autoOpen) el.open = true; } else if (autoOpen) el.open = false;
     });
     S.clientId = read("clientId"); $("ytSignIn").disabled = !S.clientId; $("ytFinish").disabled = !has("YOUTUBE_CLIENT_SECRET_JSON");
+    show($("ytNeedClient"), has("YOUTUBE_CLIENT_SECRET_JSON") && !S.clientId);
     $("topicHint").textContent = has("ANTHROPIC_API_KEY") ? "" : "(needs the Claude key)";
     const sc = setupScore(), n = sc.filter(Boolean).length;
     $("ring").style.setProperty("--p", (n / 4 * 100) + "%"); $("ringT").textContent = `${n}/4`;
