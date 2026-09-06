@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0f1117">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Faceless Studio</title>
+<style>
+  :root{--bg:#0f1117;--card:#171a23;--line:#262a37;--text:#e8eaf0;--muted:#9aa1b3;--accent:#ffd400;--ok:#3ddc84;--bad:#ff5c5c;--run:#5aa9ff;--radius:14px}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:max(12px,env(safe-area-inset-top)) 14px 40px}
+  h1{font-size:22px;margin:6px 0 14px;display:flex;align-items:center;gap:10px}
+  h1 small{font-weight:400;color:var(--muted);font-size:13px}
+  h2{font-size:15px;margin:0 0 10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:14px}
+  label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+  input,select,textarea{width:100%;background:#0c0e14;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font-size:16px}
+  textarea{min-height:64px;resize:vertical}
+  .row{display:flex;gap:8px}
+  .row>*{flex:1}
+  .seg{display:flex;background:#0c0e14;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .seg button{flex:1;background:none;border:0;color:var(--muted);padding:11px;font-size:15px}
+  .seg button.on{background:var(--accent);color:#000;font-weight:700}
+  .btn{display:block;width:100%;border:0;border-radius:12px;padding:14px;font-size:17px;font-weight:700;background:var(--accent);color:#000;margin-top:14px}
+  .btn.secondary{background:#232838;color:var(--text);font-weight:600}
+  .btn.small{padding:9px 12px;font-size:14px;width:auto;display:inline-block;margin:6px 6px 0 0}
+  .btn:disabled{opacity:.45}
+  .check{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:15px}
+  .check input{width:22px;height:22px}
+  .run{border-top:1px solid var(--line);padding:12px 0}
+  .run:first-of-type{border-top:0;padding-top:0}
+  .run .t{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+  .run .title{font-weight:600}
+  .status{font-size:12px;padding:3px 8px;border-radius:999px;background:#232838;color:var(--muted);white-space:nowrap}
+  .status.success{background:rgba(61,220,132,.15);color:var(--ok)}
+  .status.failure,.status.cancelled{background:rgba(255,92,92,.15);color:var(--bad)}
+  .status.in_progress,.status.queued{background:rgba(90,169,255,.15);color:var(--run)}
+  .meta{font-size:13px;color:var(--muted);margin-top:2px}
+  .msg{font-size:14px;color:var(--muted);margin-top:10px;white-space:pre-wrap}
+  .msg.err{color:var(--bad)}
+  .msg.ok{color:var(--ok)}
+  video{width:100%;max-height:70vh;background:#000;border-radius:10px;margin-top:10px}
+  .preview h3{margin:12px 0 4px;font-size:16px}
+  .preview p{margin:0;font-size:14px;color:var(--muted);white-space:pre-wrap}
+  ul.list{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--muted)}
+  a{color:var(--run)}
+  details summary{cursor:pointer;color:var(--muted);font-size:14px}
+  .secret{display:inline-block;font-size:12px;padding:3px 8px;border-radius:999px;margin:4px 4px 0 0;background:#232838;color:var(--muted)}
+  .secret.have{background:rgba(61,220,132,.15);color:var(--ok)}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<h1>🎬 Faceless Studio <small id="repoLabel"></small></h1>
+
+<section class="card" id="setup">
+  <h2>Setup</h2>
+  <label>GitHub token (fine-grained, this repo only)</label>
+  <input id="token" type="password" placeholder="github_pat_…" autocomplete="off">
+  <div class="row">
+    <div><label>Owner</label><input id="owner" value="manikandankrish13"></div>
+    <div><label>Repository</label><input id="repo" value="youtube-ideas"></div>
+  </div>
+  <button class="btn" id="saveBtn">Save &amp; connect</button>
+  <div class="msg" id="setupMsg"></div>
+  <details style="margin-top:10px">
+    <summary>How to create the token (2 minutes)</summary>
+    <ul class="list">
+      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
+      <li>Token name: <b>Faceless Studio</b>. Expiration: 1 year.</li>
+      <li>Repository access: <b>Only select repositories</b> → youtube-ideas</li>
+      <li>Repository permissions: <b>Actions: Read and write</b>, <b>Contents: Read-only</b>, <b>Secrets: Read-only</b> (optional, shows the checklist)</li>
+      <li>Generate, copy, paste above. It stays in this browser only.</li>
+    </ul>
+  </details>
+  <div id="secrets" class="hidden">
+    <label>Repository secrets</label>
+    <div id="secretList"></div>
+  </div>
+</section>
+
+<section class="card hidden" id="generate">
+  <h2>Generate</h2>
+  <div class="seg" id="fmt">
+    <button data-v="short" class="on">Short (9:16)</button>
+    <button data-v="long">Long-form (16:9)</button>
+  </div>
+  <label>Topic (optional, needs ANTHROPIC_API_KEY) — leave empty to let the idea engine choose</label>
+  <textarea id="topic" placeholder="e.g. Why the ocean is getting louder"></textarea>
+  <label>Or render a ready-made script</label>
+  <select id="script"><option value="">— Claude writes a fresh script —</option></select>
+  <label class="check"><input type="checkbox" id="autoUpload"> Upload to YouTube automatically after rendering</label>
+  <button class="btn" id="genBtn">▶ Generate video</button>
+  <div class="msg" id="genMsg"></div>
+</section>
+
+<section class="card hidden" id="runs">
+  <h2>Videos <span id="refreshing" style="float:right;font-weight:400;text-transform:none;letter-spacing:0"></span></h2>
+  <div id="runList"><div class="msg">Loading…</div></div>
+</section>
+
+<section class="card hidden" id="previewCard">
+  <h2>Preview</h2>
+  <div class="preview" id="preview"></div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const API = "https://api.github.com";
+  const state = { token: "", owner: "", repo: "", format: "short", timer: null, dispatched: JSON.parse(localStorage.getItem("fs.dispatched") || "[]") };
+
+  // ---------- storage ----------
+  const load = () => {
+    try {
+      state.token = localStorage.getItem("fs.token") || "";
+      state.owner = localStorage.getItem("fs.owner") || $("owner").value;
+      state.repo = localStorage.getItem("fs.repo") || $("repo").value;
+    } catch (e) {}
+    $("token").value = state.token; $("owner").value = state.owner; $("repo").value = state.repo;
+  };
+  const save = () => {
+    state.token = $("token").value.trim(); state.owner = $("owner").value.trim(); state.repo = $("repo").value.trim();
+    try { localStorage.setItem("fs.token", state.token); localStorage.setItem("fs.owner", state.owner); localStorage.setItem("fs.repo", state.repo); } catch (e) {}
+  };
+
+  // ---------- github api ----------
+  async function gh(path, opts = {}) {
+    const res = await fetch(API + path, {
+      ...opts,
+      headers: { Authorization: "Bearer " + state.token, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", ...(opts.headers || {}) },
+    });
+    if (res.status === 204) return null;
+    const text = await res.text();
+    let data = null; try { data = text ? JSON.parse(text) : null; } catch (e) { data = text; }
+    if (!res.ok) { const err = new Error((data && data.message) || res.statusText); err.status = res.status; throw err; }
+    return data;
+  }
+  const R = () => `/repos/${state.owner}/${state.repo}`;
+  const msg = (id, text, cls = "") => { const el = $(id); el.textContent = text; el.className = "msg " + cls; };
+
+  // ---------- setup ----------
+  async function connect() {
+    save();
+    if (!state.token) { msg("setupMsg", "Paste a token first.", "err"); return; }
+    msg("setupMsg", "Connecting…");
+    try {
+      const repo = await gh(R());
+      $("repoLabel").textContent = repo.full_name;
+      msg("setupMsg", "Connected. Default branch: " + repo.default_branch, "ok");
+      state.branch = repo.default_branch;
+      ["generate", "runs"].forEach((id) => $(id).classList.remove("hidden"));
+      loadScripts(); loadSecrets(); refresh(); schedule();
+    } catch (e) {
+      msg("setupMsg", "Could not connect: " + e.message + (e.status === 401 ? " (bad token)" : e.status === 404 ? " (token has no access to this repo)" : ""), "err");
+    }
+  }
+  async function loadScripts() {
+    try {
+      const files = await gh(R() + "/contents/examples");
+      const sel = $("script");
+      files.filter((f) => f.name.endsWith(".json")).forEach((f) => { const o = document.createElement("option"); o.value = f.path; o.textContent = f.name.replace(".json", "").replace(/-/g, " "); sel.appendChild(o); });
+    } catch (e) {}
+  }
+  async function loadSecrets() {
+    const need = ["ANTHROPIC_API_KEY", "PEXELS_API_KEY", "PIXABAY_API_KEY", "YOUTUBE_API_KEY", "YOUTUBE_CLIENT_SECRET_JSON", "YOUTUBE_TOKEN_JSON"];
+    try {
+      const data = await gh(R() + "/actions/secrets?per_page=100");
+      const have = new Set(data.secrets.map((s) => s.name));
+      $("secretList").innerHTML = need.map((n) => `<span class="secret ${have.has(n) ? "have" : ""}">${have.has(n) ? "✓" : "✗"} ${n}</span>`).join("") +
+        `<div class="meta" style="margin-top:6px">Add missing ones at <a target="_blank" rel="noopener" href="https://github.com/${state.owner}/${state.repo}/settings/secrets/actions">Settings → Secrets → Actions</a>. Uploading needs the two YOUTUBE_* secrets.</div>`;
+      $("secrets").classList.remove("hidden");
+    } catch (e) { $("secrets").classList.add("hidden"); }
+  }
+
+  // ---------- generate ----------
+  async function generate() {
+    const script = $("script").value, topic = $("topic").value.trim(), upload = $("autoUpload").checked;
+    const inputs = { count: "1", no_upload: upload ? "false" : "true", topic: script ? "" : topic, script, config: state.format === "long" ? "config/long.yaml" : "config/channel.yaml" };
+    $("genBtn").disabled = true; msg("genMsg", "Starting…");
+    try {
+      await gh(R() + "/actions/workflows/daily.yml/dispatches", { method: "POST", body: JSON.stringify({ ref: state.branch || "main", inputs }) });
+      const label = script ? $("script").selectedOptions[0].textContent : topic || "idea engine pick";
+      state.dispatched.unshift({ at: Date.now(), label: `${state.format === "long" ? "Long-form" : "Short"}: ${label}${upload ? " → upload" : ""}` });
+      state.dispatched = state.dispatched.slice(0, 30);
+      localStorage.setItem("fs.dispatched", JSON.stringify(state.dispatched));
+      msg("genMsg", "Queued. It appears in the list below in a few seconds. Shorts take ~3 min, long-form ~10-15 min.", "ok");
+      setTimeout(refresh, 4000); setTimeout(refresh, 12000);
+    } catch (e) {
+      msg("genMsg", "Failed: " + e.message + (e.status === 403 ? " — token needs Actions: Read and write" : e.status === 404 ? " — the workflow must exist on the default branch" : ""), "err");
+    } finally { $("genBtn").disabled = false; }
+  }
+
+  // ---------- runs ----------
+  const fmtAgo = (iso) => { const s = (Date.now() - new Date(iso)) / 1000; if (s < 90) return "just now"; if (s < 5400) return Math.round(s / 60) + " min ago"; if (s < 172800) return Math.round(s / 3600) + " h ago"; return Math.round(s / 86400) + " d ago"; };
+  const labelFor = (run) => { const t = new Date(run.created_at).getTime(); const d = state.dispatched.find((x) => Math.abs(x.at - t) < 120000); return d ? d.label : run.event === "schedule" ? "Scheduled daily video" : "Manual run"; };
+  async function refresh() {
+    if (!state.token) return;
+    $("refreshing").textContent = "…";
+    try {
+      const [daily, uploads] = await Promise.all([
+        gh(R() + "/actions/workflows/daily.yml/runs?per_page=12"),
+        gh(R() + "/actions/workflows/upload.yml/runs?per_page=12").catch(() => ({ workflow_runs: [] })),
+      ]);
+      const runs = [...daily.workflow_runs, ...uploads.workflow_runs].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 15);
+      const html = runs.map((run) => {
+        const st = run.status === "completed" ? run.conclusion : run.status;
+        const isUpload = run.path.endsWith("upload.yml");
+        const title = isUpload ? "YouTube upload" : labelFor(run);
+        const done = run.status === "completed" && run.conclusion === "success";
+        return `<div class="run" data-id="${run.id}">
+          <div class="t"><span class="title">${title}</span><span class="status ${st}">${st.replace("_", " ")}</span></div>
+          <div class="meta">${fmtAgo(run.created_at)} · run #${run.run_number} · <a href="${run.html_url}" target="_blank" rel="noopener">log</a></div>
+          ${!isUpload && done ? `<button class="btn small secondary" data-act="preview" data-id="${run.id}">▶ Preview</button><button class="btn small" data-act="upload" data-id="${run.id}">⬆ Upload to YouTube</button><a class="btn small secondary" href="${run.html_url}#artifacts" target="_blank" rel="noopener">⬇ Download</a>` : ""}
+          ${run.status !== "completed" ? `<button class="btn small secondary" data-act="cancel" data-id="${run.id}">✕ Cancel</button>` : ""}
+        </div>`;
+      }).join("");
+      $("runList").innerHTML = html || '<div class="msg">No videos yet. Tap Generate.</div>';
+      state.busy = runs.some((r) => r.status !== "completed");
+    } catch (e) { $("runList").innerHTML = `<div class="msg err">${e.message}</div>`; }
+    $("refreshing").textContent = "";
+  }
+  function schedule() { clearInterval(state.timer); state.timer = setInterval(() => { if (state.busy || document.visibilityState === "visible") refresh(); }, state.busy ? 15000 : 45000); }
+
+  // ---------- preview / upload / cancel ----------
+  async function preview(id) {
+    $("previewCard").classList.remove("hidden"); $("previewCard").scrollIntoView({ behavior: "smooth" });
+    const box = $("preview"); box.innerHTML = '<div class="msg">Fetching the video… (Shorts ~15 MB)</div>';
+    try {
+      const arts = await gh(R() + `/actions/runs/${id}/artifacts`);
+      const art = arts.artifacts.find((a) => a.name.startsWith("videos-")) || arts.artifacts[0];
+      if (!art) throw new Error("No artifact on this run (it may have expired after 7 days).");
+      const res = await fetch(art.archive_download_url, { headers: { Authorization: "Bearer " + state.token } });
+      if (!res.ok) throw new Error("Download failed: " + res.status);
+      const zip = await JSZip.loadAsync(await res.blob());
+      const find = (suffix) => Object.values(zip.files).find((f) => !f.dir && f.name.endsWith(suffix));
+      const vf = find("video.mp4"), mf = find("metadata.json"), tf = find("thumbnail.jpg");
+      if (!vf) throw new Error("video.mp4 not found in the artifact");
+      const meta = mf ? JSON.parse(await mf.async("string")) : {};
+      const url = URL.createObjectURL(new Blob([await vf.async("uint8array")], { type: "video/mp4" }));
+      const thumb = tf ? URL.createObjectURL(new Blob([await tf.async("uint8array")], { type: "image/jpeg" })) : "";
+      box.innerHTML = `<h3>${meta.title || "Video"}</h3>
+        <video controls playsinline ${thumb ? `poster="${thumb}"` : ""} src="${url}"></video>
+        <p>${(meta.description || "").slice(0, 600)}</p>
+        <div class="meta" style="margin-top:8px">${(meta.tags || []).slice(0, 8).map((t) => "#" + t.replace(/\s+/g, "")).join(" ")}</div>
+        <button class="btn" data-act="upload" data-id="${id}">⬆ Upload this to YouTube</button>
+        <a class="btn secondary" href="${url}" download="video.mp4">Save video to phone</a>`;
+    } catch (e) { box.innerHTML = `<div class="msg err">${e.message}</div><div class="msg">You can always download it from the run page under Artifacts.</div>`; }
+  }
+  async function uploadRun(id) {
+    if (!confirm("Upload this video to your YouTube channel now?")) return;
+    try {
+      await gh(R() + "/actions/workflows/upload.yml/dispatches", { method: "POST", body: JSON.stringify({ ref: state.branch || "main", inputs: { run_id: String(id), privacy: "" } }) });
+      alert("Upload started. It appears in the list as 'YouTube upload' and takes about a minute.");
+      setTimeout(refresh, 4000);
+    } catch (e) { alert("Could not start upload: " + e.message + (e.status === 404 ? "\nThe upload workflow must be on the default branch." : "")); }
+  }
+  async function cancelRun(id) {
+    if (!confirm("Cancel this run?")) return;
+    try { await gh(R() + `/actions/runs/${id}/cancel`, { method: "POST" }); setTimeout(refresh, 3000); } catch (e) { alert(e.message); }
+  }
+
+  // ---------- wiring ----------
+  $("saveBtn").onclick = connect;
+  $("genBtn").onclick = generate;
+  $("fmt").onclick = (e) => { const b = e.target.closest("button"); if (!b) return; state.format = b.dataset.v; [...$("fmt").children].forEach((x) => x.classList.toggle("on", x === b)); };
+  document.body.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-act]"); if (!b) return;
+    ({ preview, upload: uploadRun, cancel: cancelRun })[b.dataset.act](b.dataset.id);
+  });
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") refresh(); });
+  load(); if (state.token) connect();
+})();
+</script>
+</body>
+</html>
