@@ -4,205 +4,243 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#101218">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F6F7FB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1117" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <title>Faceless Studio</title>
 <style>
-  :root{--bg:#101218;--card:#191c26;--card2:#20242f;--line:#2a2f3d;--text:#eef0f6;--muted:#9ea6ba;--accent:#ffd60a;--ok:#3ddc84;--bad:#ff6b6b;--run:#5aa9ff;--warn:#ffb347;--r:16px}
+  :root{--bg:#F6F7FB;--card:#FFFFFF;--card2:#F1F2F7;--line:#E6E8F0;--text:#14161F;--muted:#6B7280;--faint:#9CA3AF;
+        --primary:#4F46E5;--primary-2:#EEF2FF;--ok:#16A34A;--ok-2:#DCFCE7;--warn:#D97706;--warn-2:#FEF3C7;--bad:#DC2626;--bad-2:#FEE2E2;--yt:#FF0000;--info:#2563EB;--info-2:#DBEAFE;
+        --r:18px;--shadow:0 1px 2px rgba(20,22,31,.04),0 8px 24px rgba(20,22,31,.06)}
+  @media (prefers-color-scheme: dark){:root{--bg:#0F1117;--card:#181B24;--card2:#20242F;--line:#2A2F3D;--text:#EEF0F6;--muted:#A3AABB;--faint:#6B7280;
+        --primary:#818CF8;--primary-2:#1E1B4B;--ok:#4ADE80;--ok-2:#052E16;--warn:#FBBF24;--warn-2:#3B2A05;--bad:#F87171;--bad-2:#3B0A0A;--info:#60A5FA;--info-2:#0B2447;--shadow:none}}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-  body{padding:calc(10px + env(safe-area-inset-top)) 14px calc(84px + env(safe-area-inset-bottom))}
-  header{display:flex;align-items:center;justify-content:space-between;margin:4px 0 14px}
-  header h1{font-size:20px;margin:0}
-  header .sub{font-size:12px;color:var(--muted)}
-  .pill{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--card2);color:var(--muted);white-space:nowrap}
-  .pill.ok{background:rgba(61,220,132,.15);color:var(--ok)}.pill.bad{background:rgba(255,107,107,.15);color:var(--bad)}
-  .pill.run{background:rgba(90,169,255,.15);color:var(--run)}.pill.warn{background:rgba(255,179,71,.15);color:var(--warn)}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
-  .card h2{font-size:17px;margin:0 0 6px}
-  .card .lead{color:var(--muted);font-size:14px;margin:0 0 12px}
-  label{display:block;font-size:13px;color:var(--muted);margin:12px 0 5px}
-  input,select,textarea{width:100%;background:#0d0f15;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px 13px;font-size:16px;font-family:inherit}
-  textarea{min-height:70px;resize:vertical}
-  .seg{display:flex;background:#0d0f15;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  .seg button{flex:1;background:none;border:0;color:var(--muted);padding:12px;font-size:15px;font-family:inherit}
-  .seg button.on{background:var(--accent);color:#000;font-weight:700}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:13px;padding:14px;font-size:16px;font-weight:700;background:var(--accent);color:#000;margin-top:14px;font-family:inherit;text-decoration:none}
-  .btn.sec{background:var(--card2);color:var(--text);font-weight:600}
-  .btn.ghost{background:none;border:1px solid var(--line);color:var(--muted);font-weight:600}
-  .btn.sm{width:auto;padding:9px 13px;font-size:14px;margin:8px 8px 0 0}
-  .btn:disabled{opacity:.45}
-  .row{display:flex;gap:10px}.row>*{flex:1}
-  .toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;font-size:15px}
-  .toggle input{width:24px;height:24px;flex:0 0 auto}
-  .msg{font-size:14px;color:var(--muted);margin-top:10px;white-space:pre-wrap}.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
-  .step{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.step:first-child{border-top:0}
-  .step .n{width:28px;height:28px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:13px;flex:0 0 auto;color:var(--muted)}
-  .step.done .n{background:rgba(61,220,132,.18);color:var(--ok)}.step.active .n{background:rgba(90,169,255,.18);color:var(--run)}.step.fail .n{background:rgba(255,107,107,.18);color:var(--bad)}
-  .step .b{flex:1}.step .t{font-weight:600}.step .d{font-size:13px;color:var(--muted)}
-  .vid{border-top:1px solid var(--line);padding:14px 0}.vid:first-child{border-top:0;padding-top:0}
-  .vid .h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-  .vid .title{font-weight:700;font-size:16px;line-height:1.3}
-  .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px;color:var(--muted);margin-top:8px}
-  .kv b{color:var(--text);font-weight:500}
+  html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 "Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  body{padding:calc(8px + env(safe-area-inset-top)) 16px calc(92px + env(safe-area-inset-bottom));max-width:640px;margin:0 auto}
+  h1,h2,h3{margin:0;letter-spacing:-.01em}
+  .topbar{display:flex;align-items:center;gap:12px;padding:10px 0 18px}
+  .avatar{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#6366F1,#EC4899);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex:0 0 auto}
+  .topbar .name{font-weight:800;font-size:18px;line-height:1.2}
+  .topbar .sub{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px}
+  .topbar .spacer{flex:1}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--bad);box-shadow:0 0 0 4px var(--bad-2)}.dot.ok{background:var(--ok);box-shadow:0 0 0 4px var(--ok-2)}
+  .h-page{font-size:26px;font-weight:800;margin:6px 0 4px}
+  .lead{color:var(--muted);font-size:15px;margin:0 0 16px;line-height:1.5}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .card h2{font-size:18px;font-weight:800;margin-bottom:4px}
+  .card .lead{margin-bottom:12px}
+  .hero{background:linear-gradient(135deg,var(--primary),#7C3AED);color:#fff;border:0}
+  .hero h2,.hero .lead{color:#fff}.hero .lead{opacity:.85}
+  .hero .btn{background:#fff;color:var(--primary);margin-top:8px}
+  .hero .seg button{color:rgba(255,255,255,.92)}.hero .seg small{color:rgba(255,255,255,.7)}
+  .hero .seg button.on{color:var(--primary)}.hero .seg button.on small{color:var(--muted)}
+  label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:14px 0 6px}
+  input,select,textarea{width:100%;background:var(--card2);color:var(--text);border:1.5px solid transparent;border-radius:14px;padding:13px 14px;font-size:16px;font-family:inherit;outline:none;transition:border-color .15s}
+  input:focus,select:focus,textarea:focus{border-color:var(--primary);background:var(--card)}
+  textarea{min-height:76px;resize:vertical}
+  select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+  .seg{display:flex;background:var(--card2);border-radius:14px;padding:4px;gap:4px}
+  .seg button{flex:1;background:none;border:0;color:var(--muted);padding:11px 8px;font-size:14px;font-weight:600;font-family:inherit;border-radius:11px;line-height:1.25}
+  .seg button.on{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .seg small{display:block;font-weight:500;font-size:12px;color:var(--faint)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:15px 16px;font-size:16px;font-weight:700;background:var(--primary);color:#fff;margin-top:14px;font-family:inherit;text-decoration:none;cursor:pointer;transition:transform .05s}
+  .btn:active{transform:scale(.985)}
+  .btn.sec{background:var(--primary-2);color:var(--primary)}
+  .btn.ghost{background:var(--card2);color:var(--text)}
+  .btn.yt{background:var(--yt);color:#fff}
+  .btn.sm{width:auto;padding:10px 14px;font-size:14px;margin:10px 8px 0 0}
+  .btn:disabled{opacity:.45;cursor:default}
+  .row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+  .row .btn.sm{margin-top:0;align-self:flex-end;flex:0 0 auto}
+  .inline{display:flex;gap:8px;align-items:center;margin-top:6px}.inline input{flex:1}.inline .btn.sm{margin:0;flex:0 0 auto}
+  .msg{font-size:14px;color:var(--muted);margin-top:10px;white-space:pre-wrap;line-height:1.45}.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--card2);color:var(--muted);white-space:nowrap}
+  .pill.ok{background:var(--ok-2);color:var(--ok)}.pill.bad{background:var(--bad-2);color:var(--bad)}.pill.warn{background:var(--warn-2);color:var(--warn)}.pill.info{background:var(--info-2);color:var(--info)}
+  /* progress strip */
+  .strip{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .strip .bar{flex:1;height:8px;background:var(--card2);border-radius:99px;overflow:hidden}.strip .bar i{display:block;height:100%;background:var(--ok);border-radius:99px;transition:width .3s}
+  .strip .t{font-size:14px;font-weight:600}.strip .s{font-size:12px;color:var(--muted)}
+  /* steps */
+  .stepc{border:1px solid var(--line);border-radius:16px;margin-top:12px;overflow:hidden;background:var(--card)}
+  .stepc summary{list-style:none;display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}
+  .stepc summary::-webkit-details-marker{display:none}
+  .stepc .n{width:32px;height:32px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--muted);flex:0 0 auto}
+  .stepc.done .n{background:var(--ok-2);color:var(--ok)}.stepc.active .n{background:var(--primary-2);color:var(--primary)}
+  .stepc .st{flex:1}.stepc .st .t{font-weight:700;font-size:16px}.stepc .st .d{font-size:13px;color:var(--muted)}
+  .stepc .body{padding:0 16px 16px 60px}
+  @media (max-width:380px){.stepc .body{padding-left:16px}}
+  /* progress steps */
+  .prog{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.prog:first-child{border-top:0}
+  .prog .n{width:28px;height:28px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--muted);flex:0 0 auto}
+  .prog.done .n{background:var(--ok-2);color:var(--ok)}.prog.active .n{background:var(--info-2);color:var(--info)}.prog.fail .n{background:var(--bad-2);color:var(--bad)}
+  .prog .t{font-weight:600}.prog.active .t::after{content:"";display:inline-block;width:8px;height:8px;margin-left:8px;border-radius:50%;background:var(--info);animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+  /* video cards */
+  .vcard{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--line)}.vcard:first-child{border-top:0;padding-top:4px}
+  .thumb{width:74px;height:74px;border-radius:14px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;background:linear-gradient(135deg,#0EA5E9,#6366F1)}
+  .thumb.long{background:linear-gradient(135deg,#F59E0B,#EF4444)}.thumb.up{background:linear-gradient(135deg,#374151,#111827)}
+  .vbody{flex:1;min-width:0}
+  .vtitle{font-weight:700;font-size:16px;line-height:1.3;margin-bottom:6px}
+  .vmeta{font-size:13px;color:var(--muted);line-height:1.6}
+  .vmeta b{color:var(--text);font-weight:600}
+  .vact{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .vact .btn{width:auto;margin:0;padding:9px 13px;font-size:14px;border-radius:11px}
   .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;text-align:center}
-  .stat .v{font-size:22px;font-weight:700}.stat .k{font-size:12px;color:var(--muted)}
-  video{width:100%;max-height:68vh;background:#000;border-radius:12px;margin-top:10px}
-  .idea{border-top:1px solid var(--line);padding:12px 0}.idea:first-child{border-top:0}
-  .idea .t{font-weight:600}.idea .h{font-size:14px;color:var(--muted);margin-top:2px}
-  nav{position:fixed;left:0;right:0;bottom:0;background:rgba(16,18,24,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
-  nav button{flex:1;background:none;border:0;color:var(--muted);font-size:12px;padding:6px 0;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:2px}
-  nav button span{font-size:20px}nav button.on{color:var(--accent)}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 10px;text-align:center;box-shadow:var(--shadow)}
+  .stat .v{font-size:22px;font-weight:800}.stat .k{font-size:12px;color:var(--muted)}
+  video{width:100%;max-height:68vh;background:#000;border-radius:14px;margin-top:12px}
+  /* ideas */
+  .idea{padding:14px 0;border-top:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}.idea:first-child{border-top:0;padding-top:4px}
+  .idea .rank{width:30px;height:30px;border-radius:10px;background:var(--primary-2);color:var(--primary);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .idea .t{font-weight:700;line-height:1.3}.idea .h{font-size:14px;color:var(--muted);margin-top:3px}
+  .idea .go{color:var(--primary);font-weight:700;font-size:14px;margin-top:6px}
+  .score{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:6px}.score i{display:inline-block;width:60px;height:6px;background:var(--card2);border-radius:99px;overflow:hidden}.score i b{display:block;height:100%;background:var(--ok)}
+  /* empty */
+  .empty{text-align:center;padding:26px 10px;color:var(--muted)}.empty .ic{font-size:44px;margin-bottom:8px}.empty .t{font-weight:700;color:var(--text);font-size:16px}
+  /* nav */
+  nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+  nav .in{display:flex;width:100%;max-width:640px}
+  nav button{flex:1;background:none;border:0;color:var(--faint);font-size:11.5px;font-weight:600;padding:6px 0 2px;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;border-radius:12px}
+  nav button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  nav button.on{color:var(--primary)}
+  /* sheet + toast */
+  .sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+  .sheet .in{background:var(--card);width:100%;max-width:640px;border-radius:22px 22px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom))}
+  .sheet h3{font-size:18px;font-weight:800;margin-bottom:4px}.sheet .lead{margin-bottom:6px}
+  .sheet .opt{display:flex;align-items:center;gap:12px;width:100%;background:var(--card2);border:0;border-radius:14px;padding:14px;margin-top:8px;font-family:inherit;font-size:16px;color:var(--text);text-align:left}
+  .sheet .opt b{display:block}.sheet .opt small{color:var(--muted);font-size:13px}
+  .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:12px 18px;border-radius:14px;font-size:14px;font-weight:600;z-index:60;max-width:90vw;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+  details.help summary{cursor:pointer;color:var(--primary);font-weight:600;font-size:14px;margin-top:10px;list-style:none}details.help summary::-webkit-details-marker{display:none}
+  ol.list,ul.list{margin:8px 0 0;padding-left:20px;font-size:14px;color:var(--muted)}ol.list li,ul.list li{margin:5px 0}
+  a{color:var(--primary)}code{background:var(--card2);padding:1px 6px;border-radius:6px;font-size:13px}
+  .badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--card2);color:var(--muted);margin:6px 6px 0 0}
   .hidden{display:none!important}
-  details summary{cursor:pointer;color:var(--run);font-size:14px;margin-top:8px}
-  ol.list,ul.list{margin:8px 0 0;padding-left:20px;font-size:14px;color:var(--muted)}ol.list li,ul.list li{margin:4px 0}
-  a{color:var(--run)}
-  code{background:#0d0f15;padding:1px 6px;border-radius:6px;font-size:13px}
-  .badge{display:inline-block;font-size:12px;padding:3px 9px;border-radius:999px;background:var(--card2);color:var(--muted);margin:6px 6px 0 0}
+  .skel{height:64px;border-radius:14px;background:linear-gradient(90deg,var(--card2),var(--line),var(--card2));background-size:200% 100%;animation:sk 1.2s infinite;margin:10px 0}
+  @keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
 </style>
 </head>
 <body>
-<header>
-  <div><h1>🎬 Faceless Studio</h1><div class="sub" id="channelSub">Your faceless channel, on autopilot</div></div>
-  <span class="pill" id="connPill">Not connected</span>
-</header>
+<div class="topbar">
+  <div class="avatar" id="avatar">F</div>
+  <div><div class="name" id="channelName">Faceless Studio</div><div class="sub" id="channelSub">Your channel, on autopilot</div></div>
+  <div class="spacer"></div><span class="dot" id="connDot" title="connection"></span>
+</div>
 
-<!-- ================= CREATE ================= -->
+<!-- ================= HOME / CREATE ================= -->
 <section id="tab-create" class="tab">
-  <div class="card" id="needSetup">
-    <h2>Welcome 👋</h2>
-    <p class="lead">This app makes complete faceless videos for your channel: it researches what people want to watch, writes a script with a strong hook, adds a natural voice, real footage, captions, and can publish straight to YouTube.</p>
-    <p class="lead">Start in <b>Setup</b> (bottom right). It takes about 10 minutes the first time.</p>
-    <button class="btn" data-tab="setup">Go to Setup →</button>
+  <div class="strip" id="setupStrip"><div><div class="t" id="stripT">Setup 0 of 4</div><div class="s" id="stripS">Finish setup to start making videos</div></div><div class="bar"><i id="stripBar" style="width:0%"></i></div><button class="btn sm sec" data-tab="setup" style="margin:0">Open</button></div>
+
+  <div class="card hero" id="heroCard">
+    <h2>Make today's video</h2>
+    <p class="lead" id="heroLead">The engine researches what people want, writes a script with a strong hook, adds voice, footage and captions.</p>
+    <div class="seg" id="fmt" style="background:rgba(255,255,255,.18)"><button data-v="short" class="on">Short<small>vertical · ~40 s</small></button><button data-v="long">Long video<small>16:9 · ~5 min</small></button></div>
+    <button class="btn" id="genBtn">▶ Generate now</button>
+    <div class="msg" id="genMsg" style="color:#fff;opacity:.9"></div>
   </div>
 
-  <div class="card hidden" id="createCard">
-    <h2>Make a video</h2>
-    <div class="seg" id="fmt"><button data-v="short" class="on">Short · vertical · ~40 s</button><button data-v="long">Long · 16:9 · ~5 min</button></div>
-    <label>What should it be about? <span id="topicHint"></span></label>
-    <textarea id="topic" placeholder="Leave empty and the idea engine picks today's best topic. Or type one, e.g. “Why airplane windows are round”"></textarea>
-    <label>Or use a ready-made script (works without a Claude key)</label>
-    <select id="script"><option value="">— Claude writes a fresh script —</option></select>
-    <div class="row">
-      <div><label>After rendering</label>
-        <select id="afterRender"><option value="review">Review first</option><option value="upload">Upload to YouTube</option></select></div>
-      <div><label>Visibility</label>
-        <select id="privacy"><option value="">Channel default</option><option value="public">Public</option><option value="unlisted">Unlisted</option><option value="private">Private</option></select></div>
-    </div>
-    <button class="btn" id="genBtn">▶ Generate video</button>
-    <div class="msg" id="genMsg"></div>
-  </div>
-
-  <div class="card hidden" id="progressCard">
-    <h2>Rendering now</h2>
+  <div class="card" id="progressCard" style="display:none">
+    <h2 id="progressTitle">Rendering now</h2>
     <p class="lead" id="progressLead"></p>
     <div id="progressSteps"></div>
-    <a class="btn ghost sm hidden" id="progressLog" target="_blank" rel="noopener">Open detailed log</a>
+    <a class="btn sm ghost" id="progressLog" target="_blank" rel="noopener">Open detailed log</a>
+  </div>
+
+  <div class="card">
+    <h2>Options</h2>
+    <label>Topic <span style="font-weight:500" id="topicHint"></span></label>
+    <textarea id="topic" placeholder="Leave empty to let the idea engine choose today's best topic, or type your own"></textarea>
+    <label>Ready-made script <span style="font-weight:500">(works without a Claude key)</span></label>
+    <select id="script"><option value="">None: Claude writes a fresh script</option></select>
+    <div class="row">
+      <div><label>After rendering</label><select id="afterRender"><option value="review">Review first</option><option value="upload">Upload to YouTube</option></select></div>
+      <div><label>Visibility</label><select id="privacy"><option value="">Channel default</option><option value="public">Public</option><option value="unlisted">Unlisted</option><option value="private">Private</option></select></div>
+    </div>
   </div>
 </section>
 
 <!-- ================= VIDEOS ================= -->
 <section id="tab-videos" class="tab hidden">
-  <div class="stats hidden" id="stats"></div>
-  <div class="card">
-    <h2>Your videos <span class="pill" id="refreshPill" style="float:right">…</span></h2>
-    <p class="lead">Rendered videos are kept for 30 days as downloadable files. Uploaded ones are on your channel; the link appears here.</p>
-    <div id="videoList"><div class="msg">Connect in Setup to see your videos.</div></div>
-  </div>
-  <div class="card hidden" id="previewCard"><h2>Preview</h2><div id="preview"></div></div>
+  <div class="h-page">Videos</div>
+  <p class="lead">Every render is kept 30 days as a file you can preview or download here. Uploaded videos show their YouTube link.</p>
+  <div class="stats" id="stats" style="display:none"></div>
+  <div class="card"><div id="videoList"><div class="skel"></div><div class="skel"></div></div><div class="msg" id="videoNote" style="text-align:right"></div></div>
+  <div class="card" id="previewCard" style="display:none"><h2>Preview</h2><div id="preview"></div></div>
 </section>
 
 <!-- ================= IDEAS ================= -->
 <section id="tab-ideas" class="tab hidden">
-  <div class="card">
-    <h2>Idea queue</h2>
-    <p class="lead">Topics the engine has researched and scored on the hook test (a “why” plus a stake). The next automatic video takes the first one. Tap any idea to make it now.</p>
-    <div id="ideaList"><div class="msg">Connect in Setup to see ideas.</div></div>
-    <button class="btn sec" id="ideasBtn">✨ Get 10 new ideas</button>
-    <div class="msg" id="ideasMsg"></div>
-  </div>
-  <div class="card">
-    <h2>Automatic schedule</h2>
-    <p class="lead" id="scheduleLead">One video is produced every day at 12:00 IST from the top of this queue and uploaded if YouTube is connected. Change the time in <code>.github/workflows/daily.yml</code>.</p>
-  </div>
+  <div class="h-page">Ideas</div>
+  <p class="lead">Researched topics, scored on the hook test: a "why" plus a stake. The daily video takes the top one. Tap an idea to make it now.</p>
+  <div class="card"><div id="ideaList"><div class="skel"></div></div><button class="btn sec" id="ideasBtn">✨ Get 10 new ideas</button><div class="msg" id="ideasMsg"></div></div>
+  <div class="card"><h2>Automatic schedule</h2><p class="lead" style="margin:0">One video is produced every day at 12:00 IST from the top of this list, and uploaded when YouTube is connected. Change the time in <code>.github/workflows/daily.yml</code>.</p></div>
 </section>
 
 <!-- ================= SETUP ================= -->
 <section id="tab-setup" class="tab hidden">
-  <div class="card">
-    <h2>Setup checklist</h2>
-    <p class="lead">Everything is saved securely as repository secrets. Nothing sensitive stays in this page except your GitHub token, which is kept in this browser only.</p>
+  <div class="h-page">Setup</div>
+  <p class="lead">About 10 minutes once. Keys are stored as encrypted repository secrets; only your GitHub token stays in this browser.</p>
 
-    <div class="step" id="s-github"><div class="n">1</div><div class="b">
-      <div class="t">Connect GitHub</div><div class="d">Lets this app start renders and save your keys.</div>
-      <div id="githubBody">
-        <input id="token" type="password" placeholder="Paste token: github_pat_…" autocomplete="off">
-        <div class="row"><div><label>Owner</label><input id="owner" value="manikandankrish13"></div><div><label>Repository</label><input id="repo" value="youtube-ideas"></div></div>
-        <button class="btn sm" id="saveBtn">Connect</button><button class="btn ghost sm hidden" id="forgetBtn">Forget token</button>
-        <div class="msg" id="setupMsg"></div>
-        <details><summary>How to create the token (2 min)</summary><ol class="list">
-          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
-          <li>Name <b>Faceless Studio</b>, expiration 1 year</li>
-          <li>Repository access: <b>Only select repositories</b> → <b>youtube-ideas</b></li>
-          <li>Repository permissions: <b>Actions: Read and write</b> · <b>Contents: Read-only</b> · <b>Secrets: Read and write</b></li>
-          <li>Generate → copy → paste above</li></ol></details>
-      </div></div></div>
+  <details class="stepc active" id="s-github" open><summary><div class="n">1</div><div class="st"><div class="t">Connect GitHub</div><div class="d">Lets the app start renders and save keys</div></div><span class="pill" id="p-github">to do</span></summary><div class="body">
+    <label>Token</label><input id="token" type="password" placeholder="github_pat_…" autocomplete="off">
+    <div class="row"><div><label>Owner</label><input id="owner" value="manikandankrish13"></div><div><label>Repository</label><input id="repo" value="youtube-ideas"></div></div>
+    <button class="btn" id="saveBtn">Connect</button><button class="btn sm ghost hidden" id="forgetBtn">Forget token</button>
+    <div class="msg" id="setupMsg"></div>
+    <details class="help"><summary>How to create the token (2 min)</summary><ol class="list">
+      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
+      <li>Name <b>Faceless Studio</b>, expiration 1 year</li>
+      <li>Repository access: <b>Only select repositories</b> → <b>youtube-ideas</b></li>
+      <li>Repository permissions: <b>Actions: Read and write</b> · <b>Contents: Read-only</b> · <b>Secrets: Read and write</b></li>
+      <li>Generate → copy → paste above → Connect</li></ol></details>
+  </div></details>
 
-    <div class="step" id="s-claude"><div class="n">2</div><div class="b">
-      <div class="t">Claude API key <span class="pill" id="p-claude">not set</span></div>
-      <div class="d">Writes the scripts and ideas. A few cents per video. Get it at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</div>
-      <div class="row"><input id="k-ANTHROPIC_API_KEY" type="password" placeholder="sk-ant-…" autocomplete="off"><button class="btn sm" data-save="ANTHROPIC_API_KEY">Save</button></div>
-    </div></div>
+  <details class="stepc" id="s-claude"><summary><div class="n">2</div><div class="st"><div class="t">Claude key</div><div class="d">Writes scripts and ideas · cents per video</div></div><span class="pill" id="p-claude">to do</span></summary><div class="body">
+    <p class="msg" style="margin-top:8px">Create a key at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a> and paste it here.</p>
+    <div class="inline"><input id="k-ANTHROPIC_API_KEY" type="password" placeholder="sk-ant-…" autocomplete="off"><button class="btn sm" data-save="ANTHROPIC_API_KEY">Save</button></div>
+  </div></details>
 
-    <div class="step" id="s-pexels"><div class="n">3</div><div class="b">
-      <div class="t">Stock footage <span class="pill" id="p-pexels">not set</span></div>
-      <div class="d">Free keys give real moving footage instead of photos. <a href="https://www.pexels.com/api/new/" target="_blank" rel="noopener">Pexels key</a> · <a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener">Pixabay key</a> (optional)</div>
-      <div class="row"><input id="k-PEXELS_API_KEY" type="password" placeholder="Pexels key" autocomplete="off"><button class="btn sm" data-save="PEXELS_API_KEY">Save</button></div>
-      <div class="row"><input id="k-PIXABAY_API_KEY" type="password" placeholder="Pixabay key (optional)" autocomplete="off"><button class="btn sm" data-save="PIXABAY_API_KEY">Save</button></div>
-    </div></div>
+  <details class="stepc" id="s-pexels"><summary><div class="n">3</div><div class="st"><div class="t">Stock footage</div><div class="d">Free keys · real moving footage instead of photos</div></div><span class="pill" id="p-pexels">to do</span></summary><div class="body">
+    <p class="msg" style="margin-top:8px">Get a free <a href="https://www.pexels.com/api/new/" target="_blank" rel="noopener">Pexels key</a>. Pixabay is optional extra variety.</p>
+    <div class="inline"><input id="k-PEXELS_API_KEY" type="password" placeholder="Pexels key" autocomplete="off"><button class="btn sm" data-save="PEXELS_API_KEY">Save</button></div>
+    <div class="inline"><input id="k-PIXABAY_API_KEY" type="password" placeholder="Pixabay key (optional)" autocomplete="off"><button class="btn sm" data-save="PIXABAY_API_KEY">Save</button></div>
+  </div></details>
 
-    <div class="step" id="s-yt"><div class="n">4</div><div class="b">
-      <div class="t">Connect YouTube <span class="pill" id="p-yt">not connected</span></div>
-      <div class="d">Needed only for uploading. Three short parts.</div>
+  <details class="stepc" id="s-yt"><summary><div class="n">4</div><div class="st"><div class="t">Connect YouTube</div><div class="d">Needed only for uploading · three short parts</div></div><span class="pill" id="p-yt">to do</span></summary><div class="body">
+    <label>4a · Google OAuth client file</label>
+    <details class="help"><summary>How to get it (5 min, once)</summary><ol class="list">
+      <li><a href="https://console.cloud.google.com/projectcreate" target="_blank" rel="noopener">Create a Google Cloud project</a> named "Faceless".</li>
+      <li><a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener">Enable the YouTube Data API v3</a>.</li>
+      <li><a href="https://console.cloud.google.com/auth/overview" target="_blank" rel="noopener">OAuth consent screen</a>: External, add your own Gmail as a test user.</li>
+      <li><a href="https://console.cloud.google.com/apis/credentials/oauthclient" target="_blank" rel="noopener">Create an OAuth client</a>, type <b>Desktop app</b>, then <b>Download JSON</b>.</li>
+      <li>Open the file, select all, copy, paste below.</li></ol></details>
+    <textarea id="k-YOUTUBE_CLIENT_SECRET_JSON" placeholder='{"installed":{"client_id":"…' autocomplete="off"></textarea>
+    <button class="btn sm" data-save="YOUTUBE_CLIENT_SECRET_JSON">Save client file</button>
+    <div class="msg" id="ytClientMsg"></div>
+    <label>4b · Sign in with the Google account that owns the channel</label>
+    <button class="btn sec" id="ytSignIn" disabled style="margin-top:4px">Open Google sign-in</button>
+    <p class="msg">Google ends on a page saying it can't connect to <b>localhost</b>. That is expected: copy the whole address from the address bar.</p>
+    <label>4c · Paste that address</label>
+    <input id="ytRedirect" placeholder="http://localhost:1/?state=…&code=…" autocomplete="off">
+    <button class="btn" id="ytFinish" disabled>Finish connecting</button>
+    <div class="msg" id="ytMsg"></div>
+  </div></details>
 
-      <label><b>4a.</b> Paste your Google OAuth client file (client_secret…json)</label>
-      <details><summary>How to get it (5 min, once)</summary><ol class="list">
-        <li>Open <a href="https://console.cloud.google.com/projectcreate" target="_blank" rel="noopener">console.cloud.google.com/projectcreate</a>, name it “Faceless”, Create.</li>
-        <li><a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener">Enable the YouTube Data API v3</a>.</li>
-        <li><a href="https://console.cloud.google.com/auth/overview" target="_blank" rel="noopener">OAuth consent</a>: External, add your own Gmail as a test user.</li>
-        <li><a href="https://console.cloud.google.com/apis/credentials/oauthclient" target="_blank" rel="noopener">Create OAuth client</a>: type <b>Desktop app</b>. Tap <b>Download JSON</b>.</li>
-        <li>Open the downloaded file, select all, copy, paste below.</li></ol></details>
-      <textarea id="k-YOUTUBE_CLIENT_SECRET_JSON" placeholder='{"installed":{"client_id":"…' autocomplete="off"></textarea>
-      <button class="btn sm" data-save="YOUTUBE_CLIENT_SECRET_JSON">Save client file</button>
-      <div class="msg" id="ytClientMsg"></div>
+  <details class="stepc" id="s-ytkey"><summary><div class="n">5</div><div class="st"><div class="t">YouTube research key</div><div class="d">Optional · studies top channels before YouTube is connected</div></div><span class="pill" id="p-ytkey">optional</span></summary><div class="body">
+    <p class="msg" style="margin-top:8px">In the same Google project: Credentials → Create credentials → <b>API key</b>.</p>
+    <div class="inline"><input id="k-YOUTUBE_API_KEY" type="password" placeholder="AIza…" autocomplete="off"><button class="btn sm" data-save="YOUTUBE_API_KEY">Save</button></div>
+  </div></details>
 
-      <label><b>4b.</b> Sign in with the Google account that owns the channel</label>
-      <button class="btn sm sec" id="ytSignIn" disabled>Open Google sign-in</button>
-      <div class="msg">Google will end on a page that says it can’t connect to <b>localhost</b>. That is expected. Copy the full address from the address bar.</div>
-
-      <label><b>4c.</b> Paste that address here</label>
-      <input id="ytRedirect" placeholder="http://localhost:1/?state=…&code=…" autocomplete="off">
-      <button class="btn sm" id="ytFinish" disabled>Finish connecting</button>
-      <div class="msg" id="ytMsg"></div>
-    </div></div>
-
-    <div class="step" id="s-ytkey"><div class="n">5</div><div class="b">
-      <div class="t">YouTube research key <span class="pill" id="p-ytkey">optional</span></div>
-      <div class="d">Lets the idea engine study top fact channels before YouTube is connected. In the same Google project: Credentials → Create credentials → <b>API key</b>.</div>
-      <div class="row"><input id="k-YOUTUBE_API_KEY" type="password" placeholder="AIza…" autocomplete="off"><button class="btn sm" data-save="YOUTUBE_API_KEY">Save</button></div>
-    </div></div>
-  </div>
-  <div class="card"><h2>Links</h2><ul class="list" id="links"></ul></div>
+  <div class="card" style="margin-top:14px"><h2>Links</h2><ul class="list" id="links"></ul></div>
 </section>
 
-<nav>
-  <button data-tab="create" class="on"><span>🎬</span>Create</button>
-  <button data-tab="videos"><span>📼</span>Videos</button>
-  <button data-tab="ideas"><span>💡</span>Ideas</button>
-  <button data-tab="setup"><span>⚙️</span>Setup</button>
-</nav>
+<nav><div class="in">
+  <button data-tab="create" class="on"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Create</button>
+  <button data-tab="videos"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>Videos</button>
+  <button data-tab="ideas"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3z"/></svg>Ideas</button>
+  <button data-tab="setup"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Setup</button>
+</div></nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/libsodium-wrappers@0.7.15/dist/browsers/sodium.js" async></script>
@@ -210,13 +248,23 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const API = "https://api.github.com";
-  const NEED = { ANTHROPIC_API_KEY: "claude", PEXELS_API_KEY: "pexels", YOUTUBE_CLIENT_SECRET_JSON: "ytclient", YOUTUBE_TOKEN_JSON: "yt", YOUTUBE_API_KEY: "ytkey" };
-  const S = { token: "", owner: "", repo: "", branch: "main", format: "short", secrets: new Set(), runs: [], history: [], queue: [], perf: null, clientId: "", timer: null, busy: false,
-              dispatched: JSON.parse(localStorage.getItem("fs.dispatched") || "[]") };
+  const safeJSON = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || "null") ?? d; } catch (e) { return d; } };
+  const S = { token: "", owner: "", repo: "", branch: "main", format: "short", secrets: new Set(), runs: [], uploadRuns: [], history: [], queue: [], perf: null, clientId: "", timer: null, connected: false,
+              dispatched: safeJSON("fs.dispatched", []) };
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const msg = (id, text, cls = "") => { const el = $(id); if (!el) return; el.textContent = text; el.className = "msg " + cls; };
   const store = (k, v) => { try { localStorage.setItem("fs." + k, v); } catch (e) {} };
   const read = (k) => { try { return localStorage.getItem("fs." + k) || ""; } catch (e) { return ""; } };
+  const show = (el, on) => { el.style.display = on ? "" : "none"; };
+  function toast(text, ms = 2600) { const t = document.createElement("div"); t.className = "toast"; t.textContent = text; document.body.appendChild(t); setTimeout(() => t.remove(), ms); }
+  function sheet(title, lead, options) {
+    return new Promise((resolve) => {
+      const el = document.createElement("div"); el.className = "sheet";
+      el.innerHTML = `<div class="in"><h3>${esc(title)}</h3><p class="lead">${esc(lead)}</p>${options.map((o, i) => `<button class="opt" data-i="${i}"><span>${o.icon || ""}</span><span><b>${esc(o.label)}</b><small>${esc(o.hint || "")}</small></span></button>`).join("")}<button class="btn ghost" data-i="-1">Cancel</button></div>`;
+      el.onclick = (e) => { const b = e.target.closest("[data-i]"); if (!b && e.target !== el) return; el.remove(); resolve(b && +b.dataset.i >= 0 ? options[+b.dataset.i].value : null); };
+      document.body.appendChild(el);
+    });
+  }
 
   // ---------- GitHub API ----------
   async function gh(path, opts = {}) {
@@ -230,11 +278,11 @@
   }
   const R = () => `/repos/${S.owner}/${S.repo}`;
   const dispatch = (wf, inputs) => gh(R() + `/actions/workflows/${wf}/dispatches`, { method: "POST", body: JSON.stringify({ ref: S.branch, inputs }) });
-  const explain = (e) => e.status === 401 ? "The token is invalid or expired." : e.status === 403 ? "The token lacks a permission (check Actions: read/write and Secrets: read/write)." : e.status === 404 ? "Not found: the token may not include this repository, or the workflow is not on the main branch yet." : e.message;
+  const explain = (e) => e.status === 401 ? "The token is invalid or expired." : e.status === 403 ? "The token lacks a permission (needs Actions: read and write, Secrets: read and write)." : e.status === 404 ? "Not found: the token may not include this repository, or that workflow is not on the main branch yet." : e.message;
 
-  // ---------- secrets (libsodium sealed box) ----------
+  // ---------- secrets ----------
   async function sodiumReady() {
-    for (let i = 0; i < 60 && (typeof sodium === "undefined" || !sodium.ready); i++) await new Promise((r) => setTimeout(r, 100));
+    for (let i = 0; i < 80 && (typeof sodium === "undefined" || !sodium.ready); i++) await new Promise((r) => setTimeout(r, 100));
     if (typeof sodium === "undefined") throw new Error("Encryption library did not load. Check your connection and reload.");
     await sodium.ready;
   }
@@ -245,46 +293,50 @@
     await gh(R() + `/actions/secrets/${name}`, { method: "PUT", body: JSON.stringify({ encrypted_value: sodium.to_base64(sealed, sodium.base64_variants.ORIGINAL), key_id: pk.key_id }) });
   }
   async function loadSecrets() {
-    try { const d = await gh(R() + "/actions/secrets?per_page=100"); S.secrets = new Set(d.secrets.map((s) => s.name)); }
-    catch (e) { S.secrets = new Set(); }
-    renderSetup();
+    try { const d = await gh(R() + "/actions/secrets?per_page=100"); S.secrets = new Set(d.secrets.map((s) => s.name)); } catch (e) { S.secrets = new Set(); }
+    renderSetup(true);
   }
 
-  // ---------- setup rendering ----------
-  function renderSetup() {
-    const has = (n) => S.secrets.has(n);
-    const pill = (id, ok, okText, noText, cls = "bad") => { const p = $(id); p.textContent = ok ? okText : noText; p.className = "pill " + (ok ? "ok" : cls); };
-    pill("p-claude", has("ANTHROPIC_API_KEY"), "saved", "not set");
-    pill("p-pexels", has("PEXELS_API_KEY") || has("PIXABAY_API_KEY"), "saved", "not set", "warn");
-    pill("p-yt", has("YOUTUBE_TOKEN_JSON"), "connected", has("YOUTUBE_CLIENT_SECRET_JSON") ? "client saved, sign in next" : "not connected", "warn");
-    pill("p-ytkey", has("YOUTUBE_API_KEY"), "saved", "optional", "");
-    $("s-github").className = "step " + (S.token && S.connected ? "done" : "active");
-    $("s-claude").className = "step " + (has("ANTHROPIC_API_KEY") ? "done" : "");
-    $("s-pexels").className = "step " + (has("PEXELS_API_KEY") || has("PIXABAY_API_KEY") ? "done" : "");
-    $("s-yt").className = "step " + (has("YOUTUBE_TOKEN_JSON") ? "done" : has("YOUTUBE_CLIENT_SECRET_JSON") ? "active" : "");
-    $("s-ytkey").className = "step " + (has("YOUTUBE_API_KEY") ? "done" : "");
+  // ---------- setup ----------
+  function setupScore() { const h = (n) => S.secrets.has(n); return [S.connected, h("ANTHROPIC_API_KEY"), h("PEXELS_API_KEY") || h("PIXABAY_API_KEY"), h("YOUTUBE_TOKEN_JSON")]; }
+  function renderSetup(autoOpen = false) {
+    const h = (n) => S.secrets.has(n);
+    const pill = (id, ok, okText, noText, cls) => { const p = $(id); p.textContent = ok ? okText : noText; p.className = "pill " + (ok ? "ok" : cls); };
+    pill("p-github", S.connected, "connected", "to do", "bad");
+    pill("p-claude", h("ANTHROPIC_API_KEY"), "saved", "to do", "bad");
+    pill("p-pexels", h("PEXELS_API_KEY") || h("PIXABAY_API_KEY"), "saved", "recommended", "warn");
+    pill("p-yt", h("YOUTUBE_TOKEN_JSON"), "connected", h("YOUTUBE_CLIENT_SECRET_JSON") ? "sign in next" : "to do", "warn");
+    pill("p-ytkey", h("YOUTUBE_API_KEY"), "saved", "optional", "");
+    const states = { "s-github": S.connected, "s-claude": h("ANTHROPIC_API_KEY"), "s-pexels": h("PEXELS_API_KEY") || h("PIXABAY_API_KEY"), "s-yt": h("YOUTUBE_TOKEN_JSON"), "s-ytkey": h("YOUTUBE_API_KEY") };
+    let activeSet = false;
+    Object.entries(states).forEach(([id, done]) => {
+      const el = $(id); el.classList.toggle("done", !!done); el.classList.remove("active");
+      if (!done && !activeSet && id !== "s-ytkey") { el.classList.add("active"); activeSet = true; if (autoOpen) el.open = true; }
+      else if (autoOpen) el.open = false;
+    });
     S.clientId = read("clientId");
     $("ytSignIn").disabled = !S.clientId;
-    $("ytFinish").disabled = !has("YOUTUBE_CLIENT_SECRET_JSON");
-    $("topicHint").textContent = has("ANTHROPIC_API_KEY") ? "" : "(needs the Claude key from Setup)";
-    $("links").innerHTML = [
-      [`https://github.com/${S.owner}/${S.repo}/actions`, "All runs and logs on GitHub"],
-      [`https://github.com/${S.owner}/${S.repo}/settings/secrets/actions`, "Secrets on GitHub"],
-      [`https://github.com/${S.owner}/${S.repo}/blob/main/config/channel.yaml`, "Channel config (niche, voice, captions)"],
-      [`https://github.com/${S.owner}/${S.repo}/blob/main/docs/GROWTH_PLAYBOOK.md`, "Growth playbook"],
-      ["https://studio.youtube.com", "YouTube Studio"],
-    ].map(([u, t]) => `<li><a href="${u}" target="_blank" rel="noopener">${t}</a></li>`).join("");
+    $("ytFinish").disabled = !h("YOUTUBE_CLIENT_SECRET_JSON");
+    $("topicHint").textContent = h("ANTHROPIC_API_KEY") ? "" : "(needs the Claude key in Setup)";
+    const sc = setupScore(), n = sc.filter(Boolean).length;
+    $("stripT").textContent = n === 4 ? "Setup complete" : `Setup ${n} of 4`;
+    $("stripS").textContent = n === 4 ? "Everything is connected" : !sc[0] ? "Connect GitHub to begin" : !sc[1] ? "Next: add the Claude key" : !sc[2] ? "Next: add a stock footage key" : "Next: connect YouTube to upload";
+    $("stripBar").style.width = (n / 4 * 100) + "%";
+    show($("setupStrip"), n < 4);
+    $("heroLead").textContent = !sc[1] ? "Add the Claude key in Setup, or pick a ready-made script under Options." : "The engine researches what people want, writes a script with a strong hook, adds voice, footage and captions.";
+    $("links").innerHTML = [[`https://github.com/${S.owner}/${S.repo}/actions`, "All runs and logs on GitHub"], [`https://github.com/${S.owner}/${S.repo}/settings/secrets/actions`, "Secrets on GitHub"], [`https://github.com/${S.owner}/${S.repo}/blob/main/config/channel.yaml`, "Channel config: niche, voice, captions"], [`https://github.com/${S.owner}/${S.repo}/blob/main/docs/GROWTH_PLAYBOOK.md`, "Growth playbook"], ["https://studio.youtube.com", "YouTube Studio"]].map(([u, t]) => `<li><a href="${u}" target="_blank" rel="noopener">${t}</a></li>`).join("");
   }
   async function saveSecret(name) {
     const el = $("k-" + name); const value = el.value.trim();
     const out = name === "YOUTUBE_CLIENT_SECRET_JSON" ? "ytClientMsg" : "setupMsg";
-    if (!value) { msg(out, "Nothing to save.", "err"); return; }
+    if (!value) { toast("Nothing to save"); return; }
+    if (!S.connected) { toast("Connect GitHub first (step 1)"); return; }
     if (name === "YOUTUBE_CLIENT_SECRET_JSON") {
       try { const d = JSON.parse(value); const c = d.installed || d.web; if (!c || !c.client_id) throw 0; store("clientId", c.client_id); }
       catch (e) { msg(out, "That does not look like a Google OAuth client JSON (it should contain \"installed\" → \"client_id\").", "err"); return; }
     }
-    msg(out, "Saving…");
-    try { await putSecret(name, value); el.value = ""; msg(out, name + " saved.", "ok"); await loadSecrets(); }
+    toast("Saving…", 1500);
+    try { await putSecret(name, value); el.value = ""; msg(out, "", ""); toast("Saved ✓"); await loadSecrets(); }
     catch (e) { msg(out, "Could not save: " + explain(e), "err"); }
   }
 
@@ -301,21 +353,21 @@
     if (!/code=/.test(url)) { msg("ytMsg", "Paste the whole address; it must contain code=…", "err"); return; }
     $("ytFinish").disabled = true;
     try {
-      msg("ytMsg", "Saving your GitHub token so the connector can store the YouTube login…");
+      msg("ytMsg", "Preparing…");
       await putSecret("STUDIO_GH_TOKEN", S.token);
-      msg("ytMsg", "Exchanging the code with Google (runs on GitHub, ~1 min)…");
+      msg("ytMsg", "Exchanging the code with Google (runs on GitHub, about a minute)…");
       await dispatch("youtube-auth.yml", { redirect_url: url });
       for (let i = 0; i < 30; i++) {
         await new Promise((r) => setTimeout(r, 6000));
-        const runs = (await gh(R() + "/actions/workflows/youtube-auth.yml/runs?per_page=1")).workflow_runs;
-        const run = runs[0];
-        if (run && run.status === "completed") {
-          if (run.conclusion === "success") { await loadSecrets(); if (S.secrets.has("YOUTUBE_TOKEN_JSON")) { msg("ytMsg", "YouTube connected. Uploads are enabled.", "ok"); $("ytRedirect").value = ""; return; } }
+        const run = ((await gh(R() + "/actions/workflows/youtube-auth.yml/runs?per_page=1")).workflow_runs || [])[0];
+        if (run && run.status === "completed" && new Date(run.created_at) > Date.now() - 10 * 60000) {
+          await loadSecrets();
+          if (run.conclusion === "success" && S.secrets.has("YOUTUBE_TOKEN_JSON")) { msg("ytMsg", "YouTube connected. Uploads are enabled.", "ok"); $("ytRedirect").value = ""; toast("YouTube connected ✓"); return; }
           msg("ytMsg", "The connector failed. Usually the code was already used or expired: tap Open Google sign-in again and paste the new address. Log: " + run.html_url, "err"); return;
         }
         msg("ytMsg", `Connecting… (${(i + 1) * 6}s)`);
       }
-      msg("ytMsg", "Still running; check back in a minute.", "");
+      msg("ytMsg", "Still running; check back in a minute.");
     } catch (e) { msg("ytMsg", "Failed: " + explain(e), "err"); }
     finally { $("ytFinish").disabled = false; }
   }
@@ -328,15 +380,13 @@
     msg("setupMsg", "Connecting…");
     try {
       const repo = await gh(R()); S.branch = repo.default_branch; S.connected = true;
-      $("connPill").textContent = "Connected"; $("connPill").className = "pill ok";
-      $("forgetBtn").classList.remove("hidden");
+      $("connDot").className = "dot ok"; $("forgetBtn").classList.remove("hidden");
       msg("setupMsg", "Connected to " + repo.full_name + ".", "ok");
-      $("needSetup").classList.add("hidden"); $("createCard").classList.remove("hidden");
       await Promise.all([loadSecrets(), loadScripts(), loadChannel()]);
       refresh(); schedule();
-    } catch (e) { S.connected = false; $("connPill").textContent = "Not connected"; $("connPill").className = "pill bad"; msg("setupMsg", "Could not connect: " + explain(e), "err"); }
+    } catch (e) { S.connected = false; $("connDot").className = "dot"; msg("setupMsg", "Could not connect: " + explain(e), "err"); renderSetup(); }
   }
-  function forget() { S.token = ""; store("token", ""); $("token").value = ""; location.reload(); }
+  function forget() { store("token", ""); location.reload(); }
   async function loadScripts() {
     try { const files = await gh(R() + "/contents/examples"); const sel = $("script"); sel.length = 1;
       files.filter((f) => f.name.endsWith(".json")).forEach((f) => { const o = document.createElement("option"); o.value = f.path; o.textContent = f.name.replace(".json", "").replace(/-/g, " "); sel.appendChild(o); }); } catch (e) {}
@@ -344,33 +394,36 @@
   async function loadChannel() {
     try { const y = await gh(R() + "/contents/config/channel.yaml", { raw: true });
       const name = (y.match(/^\s*name:\s*"?([^"\n]+)"?/m) || [])[1], niche = (y.match(/^\s*niche:\s*"?([^"\n]+)"?/m) || [])[1];
-      if (name) $("channelSub").textContent = name + (niche ? " · " + niche : ""); } catch (e) {}
+      if (name) { $("channelName").textContent = name.trim(); $("avatar").textContent = name.trim()[0].toUpperCase(); }
+      if (niche) $("channelSub").textContent = niche.trim(); } catch (e) {}
   }
 
   // ---------- generate ----------
   async function generate() {
+    if (!S.connected) { showTab("setup"); toast("Connect GitHub first"); return; }
     const script = $("script").value, topic = $("topic").value.trim(), upload = $("afterRender").value === "upload", privacy = $("privacy").value;
-    if (!script && !S.secrets.has("ANTHROPIC_API_KEY")) { msg("genMsg", "Add the Claude key in Setup, or pick a ready-made script.", "err"); return; }
-    if (upload && !S.secrets.has("YOUTUBE_TOKEN_JSON")) { msg("genMsg", "YouTube is not connected yet (Setup step 4). Choose “Save for me to review” instead.", "err"); return; }
+    if (!script && !S.secrets.has("ANTHROPIC_API_KEY")) { msg("genMsg", "Add the Claude key in Setup, or choose a ready-made script under Options.", ""); return; }
+    if (upload && !S.secrets.has("YOUTUBE_TOKEN_JSON")) { msg("genMsg", "YouTube is not connected yet (Setup step 4). Set “After rendering” to Review first.", ""); return; }
     const inputs = { count: "1", no_upload: upload ? "false" : "true", topic: script ? "" : topic, script, privacy, config: S.format === "long" ? "config/long.yaml" : "config/channel.yaml" };
     $("genBtn").disabled = true; msg("genMsg", "Starting…");
     try {
       await dispatch("daily.yml", inputs);
-      const label = script ? $("script").selectedOptions[0].textContent : topic || "idea engine pick";
-      S.dispatched.unshift({ at: Date.now(), label: `${S.format === "long" ? "Long-form" : "Short"}: ${label}`, upload });
+      const label = script ? $("script").selectedOptions[0].textContent : topic || "Idea engine pick";
+      S.dispatched.unshift({ at: Date.now(), label: `${S.format === "long" ? "Long video" : "Short"}: ${label}`, upload });
       S.dispatched = S.dispatched.slice(0, 40); store("dispatched", JSON.stringify(S.dispatched));
-      msg("genMsg", "", ""); $("progressCard").classList.remove("hidden"); $("progressLead").textContent = "Queued on GitHub…"; $("progressSteps").innerHTML = "";
+      msg("genMsg", ""); toast("Started. Watch progress below.");
+      show($("progressCard"), true); $("progressTitle").textContent = "Rendering now"; $("progressLead").textContent = "Queued on GitHub…"; $("progressSteps").innerHTML = "";
+      $("progressCard").scrollIntoView({ behavior: "smooth", block: "start" });
       setTimeout(refresh, 5000); setTimeout(refresh, 15000);
-    } catch (e) { msg("genMsg", "Could not start: " + explain(e), "err"); }
+    } catch (e) { msg("genMsg", "Could not start: " + explain(e)); }
     finally { $("genBtn").disabled = false; }
   }
 
-  // ---------- data refresh ----------
+  // ---------- refresh ----------
   const ago = (iso) => { const s = (Date.now() - new Date(iso)) / 1000; if (s < 90) return "just now"; if (s < 5400) return Math.round(s / 60) + " min ago"; if (s < 172800) return Math.round(s / 3600) + " h ago"; return Math.round(s / 86400) + " days ago"; };
   const labelFor = (run) => { const t = new Date(run.created_at).getTime(); const d = S.dispatched.find((x) => Math.abs(x.at - t) < 150000); return d ? d.label : run.event === "schedule" ? "Scheduled daily video" : "Manual run"; };
   async function refresh() {
     if (!S.token || !S.connected) return;
-    $("refreshPill").textContent = "updating…";
     try {
       const [daily, uploads, history, queue, perf] = await Promise.all([
         gh(R() + "/actions/workflows/daily.yml/runs?per_page=15"),
@@ -380,20 +433,22 @@
         gh(R() + "/contents/data/performance.json", { raw: true }).then(JSON.parse).catch(() => null),
       ]);
       S.runs = daily.workflow_runs; S.uploadRuns = uploads.workflow_runs; S.history = history; S.queue = queue; S.perf = perf;
-      S.busy = [...S.runs, ...S.uploadRuns].some((r) => r.status !== "completed");
       renderVideos(); renderIdeas(); renderProgress(); renderStats();
+      $("videoNote").textContent = "Updated " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     } catch (e) { $("videoList").innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
-    $("refreshPill").textContent = "updated " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   }
   function schedule() { clearInterval(S.timer); S.timer = setInterval(() => { if (document.visibilityState === "visible") refresh(); }, 20000); }
 
   // ---------- progress ----------
-  const STEP_NAMES = [["Research preview", "Researching today’s trends"], ["Produce and upload", "Writing script, voice, visuals, render"], ["Refresh performance", "Reading channel stats"], ["Keep rendered files", "Saving the video file"], ["Commit state", "Updating history"]];
+  const STEP_NAMES = [["Research preview", "Researching today's trends"], ["Produce and upload", "Script, voice, visuals, render"], ["Refresh performance", "Reading channel stats"], ["Keep rendered files", "Saving the video file"], ["Commit state", "Updating your history"]];
   async function renderProgress() {
     const active = S.runs.find((r) => r.status !== "completed");
     const card = $("progressCard");
-    if (!active) { if (!card.classList.contains("hidden") && S.runs[0]) { const r = S.runs[0]; $("progressLead").textContent = r.conclusion === "success" ? "Done. Your video is in the Videos tab." : "The run did not succeed. Open the log for details."; $("progressSteps").innerHTML = ""; $("progressLog").href = r.html_url; $("progressLog").classList.remove("hidden"); } return; }
-    card.classList.remove("hidden"); $("progressLog").href = active.html_url; $("progressLog").classList.remove("hidden");
+    if (!active) {
+      if (card.style.display !== "none" && S.runs[0]) { const r = S.runs[0]; $("progressTitle").textContent = r.conclusion === "success" ? "Done ✓" : "Something went wrong"; $("progressLead").textContent = r.conclusion === "success" ? "Your video is ready in the Videos tab." : "Open the log for details, or try again."; $("progressSteps").innerHTML = ""; $("progressLog").href = r.html_url; }
+      return;
+    }
+    show(card, true); $("progressTitle").textContent = "Rendering now"; $("progressLog").href = active.html_url;
     $("progressLead").textContent = labelFor(active) + " · started " + ago(active.created_at);
     try {
       const jobs = await gh(R() + `/actions/runs/${active.id}/jobs`);
@@ -401,19 +456,20 @@
       $("progressSteps").innerHTML = STEP_NAMES.map(([key, label], i) => {
         const st = steps.find((s) => s.name.startsWith(key));
         const cls = !st ? "" : st.status === "completed" ? (st.conclusion === "success" || st.conclusion === "skipped" ? "done" : "fail") : st.status === "in_progress" ? "active" : "";
-        const icon = cls === "done" ? "✓" : cls === "active" ? "…" : cls === "fail" ? "!" : i + 1;
-        return `<div class="step ${cls}"><div class="n">${icon}</div><div class="b"><div class="t">${label}</div></div></div>`;
+        const icon = cls === "done" ? "✓" : cls === "fail" ? "!" : i + 1;
+        return `<div class="prog ${cls}"><div class="n">${icon}</div><div class="t">${label}</div></div>`;
       }).join("");
-    } catch (e) { $("progressSteps").innerHTML = `<div class="msg">Waiting for the runner…</div>`; }
+    } catch (e) { $("progressSteps").innerHTML = `<div class="msg">Waiting for a runner…</div>`; }
   }
 
   // ---------- videos ----------
   function renderStats() {
     const p = S.perf; const box = $("stats");
-    if (!p) { box.classList.add("hidden"); return; }
-    box.classList.remove("hidden");
-    box.innerHTML = [[p.subscribers, "subscribers"], [p.total_views, "total views"], [p.video_count, "videos"]].map(([v, k]) => `<div class="stat"><div class="v">${Number(v || 0).toLocaleString()}</div><div class="k">${k}</div></div>`).join("");
+    if (!p) { show(box, false); return; }
+    show(box, true);
+    box.innerHTML = [[p.subscribers, "subscribers"], [p.total_views, "views"], [p.video_count, "videos"]].map(([v, k]) => `<div class="stat"><div class="v">${Number(v || 0).toLocaleString()}</div><div class="k">${k}</div></div>`).join("");
   }
+  const fmtLen = (d) => `${Math.floor(d / 60)}:${String(Math.round(d % 60)).padStart(2, "0")}`;
   function renderVideos() {
     const runsDone = S.runs.filter((r) => r.status === "completed");
     const hist = [...S.history].reverse().filter((h) => h.status !== "lost");
@@ -424,41 +480,38 @@
       if (run) used.add(run.id);
       return videoCard(h, run);
     });
-    // runs without a history entry (failed, or history not committed yet)
-    runsDone.filter((r) => !used.has(r.id)).forEach((r) => cards.unshift(videoCard(null, r)));
-    (S.uploadRuns || []).slice(0, 3).forEach((r) => { if (r.status !== "completed" || r.conclusion !== "success") cards.unshift(`<div class="vid"><div class="h"><div class="title">YouTube upload</div>${statusPill(r)}</div><div class="kv"><span>Started</span><b>${ago(r.created_at)}</b><span>Log</span><b><a href="${r.html_url}" target="_blank" rel="noopener">open</a></b></div></div>`); });
-    $("videoList").innerHTML = cards.join("") || '<div class="msg">No videos yet. Make one in Create.</div>';
+    runsDone.filter((r) => !used.has(r.id) && r.conclusion !== "success").forEach((r) => cards.unshift(videoCard(null, r)));
+    (S.uploadRuns || []).filter((r) => r.status !== "completed" || r.conclusion !== "success").slice(0, 2).forEach((r) => cards.unshift(`<div class="vcard"><div class="thumb up">⬆</div><div class="vbody"><div class="vtitle">YouTube upload</div><div class="vmeta">${r.status === "completed" ? "failed" : "in progress"} · ${ago(r.created_at)} · <a href="${r.html_url}" target="_blank" rel="noopener">log</a></div></div></div>`));
+    $("videoList").innerHTML = cards.join("") || `<div class="empty"><div class="ic">🎬</div><div class="t">No videos yet</div><div>Make your first one from the Create tab.</div></div>`;
   }
-  const statusPill = (run) => { const st = run.status === "completed" ? run.conclusion : run.status; const cls = st === "success" ? "ok" : st === "failure" || st === "cancelled" ? "bad" : "run"; return `<span class="pill ${cls}">${st.replace("_", " ")}</span>`; };
   function videoCard(h, run) {
-    const status = h ? h.status : run.conclusion === "success" ? "rendered" : run.conclusion;
-    const pillCls = { uploaded: "ok", rendered: "run", needs_review: "warn", pending_upload: "warn", failure: "bad", cancelled: "bad" }[status] || "";
-    const pillText = { uploaded: "on YouTube", rendered: "ready to review", needs_review: "needs review", pending_upload: "waiting for quota", failure: "failed", cancelled: "cancelled" }[status] || status;
+    const status = h ? h.status : run.conclusion;
+    const P = { uploaded: ["ok", "On YouTube"], rendered: ["info", "Ready to review"], needs_review: ["warn", "Needs review"], pending_upload: ["warn", "Waiting for quota"], failure: ["bad", "Failed"], cancelled: ["bad", "Cancelled"] }[status] || ["", status];
+    const isLong = h ? (h.duration || 0) > 65 : /Long/.test(labelFor(run));
     const title = h ? h.title : labelFor(run);
-    const kv = [];
-    if (h) {
-      if (h.duration) kv.push(["Length", `${Math.floor(h.duration / 60)}:${String(Math.round(h.duration % 60)).padStart(2, "0")}`]);
-      if (h.voice_provider) kv.push(["Voice", { edge: "neural (edge)", gtts: "Google TTS", espeak: "offline test voice", silent: "none" }[h.voice_provider] || h.voice_provider]);
-      if (h.visual_sources && h.visual_sources.length) kv.push(["Visuals", h.visual_sources.join(", ")]);
-      if (h.publish_at) kv.push(["Publishes", new Date(h.publish_at).toLocaleString()]);
-      if (h.offline) kv.push(["Note", "template script (offline mode)"]);
-      if (h.status === "needs_review") kv.push(["Why review", h.offline ? "no Claude key: template script" : "voice fell back below publish quality"]);
-    }
-    kv.push(["When", ago(h ? h.created_at : run.created_at)]);
-    if (run) kv.push(["Log", `<a href="${run.html_url}" target="_blank" rel="noopener">open on GitHub</a>`]);
+    const bits = [];
+    if (h && h.duration) bits.push(`<b>${fmtLen(h.duration)}</b>`);
+    bits.push(isLong ? "16:9" : "Short");
+    if (h && h.voice_provider) bits.push({ edge: "neural voice", gtts: "Google voice", espeak: "test voice", silent: "no voice" }[h.voice_provider] || h.voice_provider);
+    if (h && h.visual_sources && h.visual_sources.length) bits.push("visuals: " + h.visual_sources.join(", "));
+    const when = ago(h ? h.created_at : run.created_at);
+    const why = h && h.status === "needs_review" ? `<div class="vmeta" style="color:var(--warn)">${h.offline ? "Made with a template script (no Claude key). Not uploaded." : "Voice quality fell back; saved instead of uploaded."}</div>` : "";
     const actions = [];
-    if (h && h.url) actions.push(`<a class="btn sm" href="${h.url}" target="_blank" rel="noopener">▶ Open on YouTube</a>`);
+    if (h && h.url) actions.push(`<a class="btn yt" href="${h.url}" target="_blank" rel="noopener">▶ Watch on YouTube</a>`);
     if (run && run.conclusion === "success") {
-      actions.push(`<button class="btn sm sec" data-act="preview" data-id="${run.id}">👁 Preview</button>`);
-      if (!(h && h.url)) actions.push(`<button class="btn sm" data-act="upload" data-id="${run.id}">⬆ Upload to YouTube</button>`);
-      actions.push(`<a class="btn sm ghost" href="${run.html_url}#artifacts" target="_blank" rel="noopener">⬇ Download</a>`);
-    }
-    return `<div class="vid"><div class="h"><div class="title">${esc(title)}</div><span class="pill ${pillCls}">${pillText}</span></div>
-      <div class="kv">${kv.map(([k, v]) => `<span>${k}</span><b>${v}</b>`).join("")}</div>${actions.join("")}</div>`;
+      actions.push(`<button class="btn sec" data-act="preview" data-id="${run.id}">Preview</button>`);
+      if (!(h && h.url)) actions.push(`<button class="btn yt" data-act="upload" data-id="${run.id}">Upload</button>`);
+      actions.push(`<a class="btn ghost" href="${run.html_url}#artifacts" target="_blank" rel="noopener">Download</a>`);
+    } else if (run) actions.push(`<a class="btn ghost" href="${run.html_url}" target="_blank" rel="noopener">Open log</a>`);
+    return `<div class="vcard"><div class="thumb ${isLong ? "long" : ""}">${isLong ? "▭" : "▯"}</div><div class="vbody">
+      <div class="vtitle">${esc(title)}</div>
+      <div><span class="pill ${P[0]}">${P[1]}</span> <span class="vmeta">· ${when}</span></div>
+      <div class="vmeta">${bits.join(" · ")}</div>${why}
+      <div class="vact">${actions.join("")}</div></div></div>`;
   }
   async function preview(id) {
-    $("previewCard").classList.remove("hidden"); $("previewCard").scrollIntoView({ behavior: "smooth" });
-    const box = $("preview"); box.innerHTML = '<div class="msg">Fetching the video… Shorts ~15 MB, long-form ~100 MB.</div>';
+    show($("previewCard"), true); $("previewCard").scrollIntoView({ behavior: "smooth" });
+    const box = $("preview"); box.innerHTML = '<div class="skel"></div><div class="msg">Fetching the video… Shorts ~15 MB, long videos ~100 MB.</div>';
     try {
       const arts = await gh(R() + `/actions/runs/${id}/artifacts`);
       const art = arts.artifacts.find((a) => a.name.startsWith("videos-")) || arts.artifacts[0];
@@ -473,40 +526,46 @@
       const meta = mf ? JSON.parse(await mf.async("string")) : {};
       const url = URL.createObjectURL(new Blob([await vf.async("uint8array")], { type: "video/mp4" }));
       const thumb = tf ? URL.createObjectURL(new Blob([await tf.async("uint8array")], { type: "image/jpeg" })) : "";
-      const sc = (meta.script || {});
-      box.innerHTML = `<div class="title" style="font-weight:700">${esc(meta.title || "Video")}</div>
+      const sc = meta.script || {};
+      box.innerHTML = `<div class="vtitle">${esc(meta.title || "Video")}</div>
         <video controls playsinline ${thumb ? `poster="${thumb}"` : ""} src="${url}"></video>
-        <details open><summary>Description</summary><div class="msg">${esc(meta.description || "")}</div></details>
-        <details><summary>Script (${(sc.scenes || []).length} scenes)</summary><div class="msg">${(sc.scenes || []).map((s, i) => `${i + 1}. ${esc(s.text)}`).join("\n")}</div></details>
+        <details class="help" open><summary>Description</summary><div class="msg">${esc(meta.description || "")}</div></details>
+        <details class="help"><summary>Script · ${(sc.scenes || []).length} scenes</summary><div class="msg">${(sc.scenes || []).map((s, i) => `${i + 1}. ${esc(s.text)}`).join("\n")}</div></details>
         <div>${(meta.tags || []).slice(0, 10).map((t) => `<span class="badge">#${esc(t.replace(/\s+/g, ""))}</span>`).join("")}</div>
-        <button class="btn" data-act="upload" data-id="${id}">⬆ Upload this to YouTube</button>
-        <a class="btn sec" href="${url}" download="video.mp4">Save video to phone</a>`;
+        <button class="btn yt" data-act="upload" data-id="${id}">⬆ Upload to YouTube</button>
+        <a class="btn ghost" href="${url}" download="video.mp4">Save video to phone</a>`;
     } catch (e) { box.innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
   }
   async function uploadRun(id) {
-    if (!S.secrets.has("YOUTUBE_TOKEN_JSON")) { alert("YouTube is not connected yet. Finish Setup step 4 first."); return; }
-    const privacy = prompt("Visibility: public, unlisted or private? (leave empty for channel default)", "") ?? null;
+    if (!S.secrets.has("YOUTUBE_TOKEN_JSON")) { toast("Connect YouTube first (Setup step 4)"); showTab("setup"); return; }
+    const privacy = await sheet("Upload to YouTube", "Who should be able to see it?", [
+      { value: "public", label: "Public", hint: "Visible to everyone, appears in the feed", icon: "🌍" },
+      { value: "unlisted", label: "Unlisted", hint: "Only people with the link", icon: "🔗" },
+      { value: "private", label: "Private", hint: "Only you, publish later from YouTube Studio", icon: "🔒" },
+      { value: "", label: "Channel default", hint: "Whatever the config says", icon: "⚙️" },
+    ]);
     if (privacy === null) return;
-    try { await dispatch("upload.yml", { run_id: String(id), privacy: privacy.trim() }); alert("Upload started. It shows up in Videos as “YouTube upload” and takes about a minute."); setTimeout(refresh, 5000); }
-    catch (e) { alert("Could not start upload: " + explain(e)); }
+    try { await dispatch("upload.yml", { run_id: String(id), privacy }); toast("Upload started, about a minute"); setTimeout(refresh, 5000); }
+    catch (e) { toast("Could not start upload: " + explain(e), 5000); }
   }
 
   // ---------- ideas ----------
   function renderIdeas() {
     const q = S.queue || [];
-    $("ideaList").innerHTML = q.length ? q.slice(0, 25).map((i, n) => `<div class="idea" data-act="use" data-topic="${esc(i.topic)}">
-        <div class="t">${n + 1}. ${esc(i.topic)}</div><div class="h">${esc(i.hook || "")}</div>
-        <div>${i.flavour ? `<span class="badge">${esc(i.flavour.replace("_", " "))}</span>` : ""}${i.hook_score ? `<span class="badge">hook ${i.hook_score}/10</span>` : ""}${i.stake ? `<span class="badge">stake: ${esc(i.stake)}</span>` : ""}</div></div>`).join("")
-      : '<div class="msg">The queue is empty. Tap “Get 10 new ideas” (needs the Claude key), or the next daily run fills it automatically.</div>';
+    $("ideaList").innerHTML = q.length ? q.slice(0, 25).map((i, n) => `<div class="idea" data-act="use" data-topic="${esc(i.topic)}"><div class="rank">${n + 1}</div><div>
+        <div class="t">${esc(i.topic)}</div><div class="h">${esc(i.hook || "")}</div>
+        ${i.hook_score ? `<div class="score">hook ${i.hook_score}/10 <i><b style="width:${i.hook_score * 10}%"></b></i>${i.flavour ? " · " + esc(i.flavour.replace("_", " ")) : ""}</div>` : ""}
+        <div class="go">Make this →</div></div></div>`).join("")
+      : `<div class="empty"><div class="ic">💡</div><div class="t">No ideas yet</div><div>Tap “Get 10 new ideas” (needs the Claude key). The daily run also fills this list.</div></div>`;
   }
   async function newIdeas() {
-    if (!S.secrets.has("ANTHROPIC_API_KEY")) { msg("ideasMsg", "Add the Claude key in Setup first.", "err"); return; }
+    if (!S.secrets.has("ANTHROPIC_API_KEY")) { toast("Add the Claude key in Setup first"); showTab("setup"); return; }
     $("ideasBtn").disabled = true; msg("ideasMsg", "Researching and generating… about 2 minutes. This list updates on its own.");
-    try { await dispatch("ideas.yml", { count: "10" }); setTimeout(refresh, 60000); setTimeout(refresh, 120000); setTimeout(refresh, 180000); }
+    try { await dispatch("ideas.yml", { count: "10" }); [60, 120, 180].forEach((s) => setTimeout(refresh, s * 1000)); }
     catch (e) { msg("ideasMsg", "Could not start: " + explain(e), "err"); }
     finally { setTimeout(() => ($("ideasBtn").disabled = false), 5000); }
   }
-  function useIdea(topic) { $("topic").value = topic; $("script").value = ""; showTab("create"); $("topic").scrollIntoView({ behavior: "smooth" }); }
+  function useIdea(topic) { $("topic").value = topic; $("script").value = ""; showTab("create"); toast("Topic set. Tap Generate now."); }
 
   // ---------- tabs & wiring ----------
   function showTab(name) {
@@ -529,7 +588,7 @@
 
   // boot
   $("token").value = read("token"); $("owner").value = read("owner") || $("owner").value; $("repo").value = read("repo") || $("repo").value;
-  renderSetup();
+  renderSetup(true);
   if (read("token")) connect(); else showTab("setup");
 })();
 </script>
